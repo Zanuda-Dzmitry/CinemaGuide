@@ -1,4 +1,6 @@
-import type { Movie } from '../server/types'
+import type { MovieType } from '../services/types'
+import { URL_MOVIE } from '~/constants'
+import axios from 'axios'
 
 export const useMovieId = defineStore('movie', () => {
 	const movieTitle = ref('')
@@ -8,6 +10,7 @@ export const useMovieId = defineStore('movie', () => {
 	const movieGenre = ref([])
 	const movieRuntime = ref(0)
 	const moviePoster = ref('')
+	const movieBackdrop = ref('')
 	const movieBudget = ref('')
 	const movieLanguage = ref('')
 	const movieRevenue = ref('')
@@ -23,6 +26,7 @@ export const useMovieId = defineStore('movie', () => {
 		movieGenre,
 		movieRuntime,
 		moviePoster,
+		movieBackdrop,
 		movieBudget,
 		movieLanguage,
 		movieRevenue,
@@ -31,21 +35,21 @@ export const useMovieId = defineStore('movie', () => {
 		movieAwardsSummary,
 
 		fetchMovieId: async (genreId: string) => {
-			const response = await $fetch<Movie>(`/api/movie/${genreId}`)
-
-			movieTitle.value = response.title
-			moviePlot.value = response.plot
-			movieRating.value = response.tmdbRating
-			movieYear.value = response.releaseYear
-			movieGenre.value = response.genres
-			movieRuntime.value = response.runtime
-			moviePoster.value = response.posterUrl
-			movieBudget.value = response.budget
-			movieLanguage.value = response.language
-			movieRevenue.value = response.revenue
-			movieDirector.value = response.director
-			movieProduction.value = response.production
-			movieAwardsSummary.value = response.awardsSummary
+			const response = await axios.get<MovieType>(`${URL_MOVIE}/${genreId}`)
+			movieTitle.value = response.data.title
+			moviePlot.value = response.data.plot
+			movieRating.value = response.data.tmdbRating
+			movieYear.value = response.data.releaseYear
+			movieGenre.value = response.data.genres
+			movieRuntime.value = response.data.runtime
+			moviePoster.value = response.data.posterUrl
+			movieBackdrop.value = response.data.backdropUrl
+			movieBudget.value = response.data.budget
+			movieLanguage.value = response.data.language
+			movieRevenue.value = response.data.revenue
+			movieDirector.value = response.data.director
+			movieProduction.value = response.data.production
+			movieAwardsSummary.value = response.data.awardsSummary
 		},
 	}
 })

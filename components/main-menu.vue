@@ -1,20 +1,26 @@
 <script setup lang="ts">
 import CinemaGuideSvg from '../assets/icons/CinemaGuide.svg?component'
 import AuthButton from './AuthButton.vue'
+const route = useRoute()
+
+const isPathActive = (path: string) => {
+	return route.path === path
+}
+onMounted(isPathActive)
 
 const items = [
-	{ to: '/', name: 'Главная' },
-	{ to: '/genres', name: 'Жанры' },
+	{ to: '/', name: 'Главная', active: isPathActive('/') },
+	{ to: '/genres', name: 'Жанры', active: isPathActive('/genres') },
 ]
 </script>
 
 <template>
 	<div>
-		<NuxtLink to="/">
-			<CinemaGuideSvg class="logo" />
+		<NuxtLink class="logo" to="/">
+			<CinemaGuideSvg />
 		</NuxtLink>
 	</div>
-	<div>
+	<div class="nav">
 		<NuxtLink class="nav-link" v-for="item in items" :to="item.to">{{
 			item.name
 		}}</NuxtLink>
@@ -24,16 +30,29 @@ const items = [
 	</div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+@import '../assets/scss/main.scss';
 .logo {
-	width: 240px;
-	height: 32px;
+	border: none !important;
+
+	svg {
+		width: 240px;
+		height: 32px;
+	}
 }
 
-.nav-link {
-	text-decoration: none;
-	padding: 10px 15px;
-	font-size: 24px;
-	color: #fff;
+.nav {
+	display: flex;
+	column-gap: 40px;
+	.nav-link {
+		text-decoration: none;
+		font-size: 24px;
+		color: #fff;
+		padding-bottom: 8px;
+	}
+}
+
+.router-link-active {
+	border-bottom: 1.5px solid $pink_color;
 }
 </style>

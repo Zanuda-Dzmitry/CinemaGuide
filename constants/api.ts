@@ -1,4 +1,5 @@
 export const BASE_URL = 'https://cinemaguide.skillbox.cc'
+export const URL_MOVIE = `${BASE_URL}/movie`
 export const URL_MOVIE_TOP10 = `${BASE_URL}/movie/top10`
 export const URL_MOVIE_RANDOM = `${BASE_URL}/movie/random`
 export const URL_MOVIE_GENRES = `${BASE_URL}/movie/genres`

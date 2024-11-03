@@ -12,17 +12,21 @@
   "dependencies": {
     "@nuxt/image": "^1.8.0",
     "@pinia/nuxt": "^0.5.4",
+    "@vee-validate/nuxt": "^4.14.6",
     "axios": "^1.7.2",
     "h3": "^1.13.0",
+    "js-cookie": "^3.0.5",
     "nuxt": "^3.13.2",
     "nuxt-svgo-loader": "^0.4.1",
     "pinia": "^2.2.2",
     "vue": "^3.5.8",
     "vue-router": "^4.4.5",
-    "vuex": "^4.1.0"
+    "vuex": "^4.1.0",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@nuxt/types": "^2.18.1",
+    "@types/js-cookie": "^3.0.6",
     "@types/vue-router": "^2.0.0",
     "sass": "^1.79.4",
     "sass-loader": "^10.5.2",

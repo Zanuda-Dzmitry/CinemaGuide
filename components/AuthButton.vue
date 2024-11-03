@@ -1,114 +1,67 @@
 <template>
 	<div>
-		<button @click="toggleModal">Вход</button>
-
-		<Modal v-if="isModalOpen" @close="toggleModal">
-			<template #header>
-				<h2>{{ isLogin ? 'Вход' : 'Регистрация' }}</h2>
-			</template>
-
-			<template #body>
-				<div v-if="isLogin">
-					<div class="test">test@test.com d4Sv{3d23f</div>
-					<input v-model="email" placeholder="Email" />
-					<input v-model="password" type="password" placeholder="Пароль" />
-					<button @click="handleLogin">Войти</button>
-					<p>
-						Нет аккаунта?
-						<button @click="switchToRegister">Зарегистрироваться</button>
-					</p>
-					<div v-if="errorMessage">{{ errorMessage }}</div>
-				</div>
-				<div v-else>
-					<input v-model="email" placeholder="Email" />
-					<input v-model="password" type="password" placeholder="Пароль" />
-					<input v-model="name" placeholder="Имя" />
-					<input v-model="surname" placeholder="Фамилия" />
-					<!-- <button @click="handleRegister">Создать аккаунт</button> -->
-					<p>Уже есть аккаунт? <button @click="switchToLogin">Войти</button></p>
-					<div v-if="errorMessage">{{ errorMessage }}</div>
-				</div>
-			</template>
-		</Modal>
+		<button
+			class="auth-button"
+			:class="{ active: isPathActive('/profile') }"
+			@click="user ? router.push('/profile') : toggleModal()"
+		>
+			{{ user ? user.name : 'Вход' }}
+		</button>
+		<Modal
+			v-if="isModalOpen"
+			@close="toggleModal"
+			:toggle-modal="toggleModal"
+		/>
 	</div>
 </template>
 
 <script lang="ts" setup>
 import { useAuthStore } from '@/storage/auth'
-import Modal from './Modal.vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
+const route = useRoute()
 const authStore = useAuthStore()
-const email = ref('')
-const password = ref('')
-const name = ref('')
-const surname = ref('')
 const isModalOpen = ref(false)
-const isLogin = ref(true) // состояние для определения, находимся ли мы на экране логина
+const user = computed(() => authStore.user)
+
 const errorMessage = ref('')
+const isPathActive = (path: string) => {
+	return route.path === path
+}
+onMounted(isPathActive)
 
 const toggleModal = () => {
 	isModalOpen.value = !isModalOpen.value
 }
 
-const switchToRegister = () => {
-	isLogin.value = false // переключаем на регистрацию
-}
-
-const switchToLogin = () => {
-	isLogin.value = true // переключаем на вход
-}
-
-const handleLogin = async () => {
+const handleProfile = async () => {
 	try {
-		await authStore.login(email.value, password.value)
-		toggleModal() // Закрываем модальное окно после успешного входа
+		return await authStore.profile()
 	} catch (error) {
 		errorMessage.value = 'Ошибка входа. Пожалуйста, проверьте учетные данные.'
 	}
 }
-
-// const handleRegister = async () => {
-// 	try {
-// 		await authStore.register(
-// 			email.value,
-// 			password.value,
-// 			name.value,
-// 			surname.value
-// 		)
-// 		toggleModal() // Закрываем модальное окно после успешной регистрации
-// 	} catch (error) {
-// 		errorMessage.value = 'Ошибка регистрации. Пожалуйста, попробуйте снова.'
-// 	}
-// }
-
-// import { URL_LOGIN } from '~/constants'
-
-// const registerUser = async () => {
-// 	try {
-// 		const response = await fetch(URL_LOGIN, {
-// 			method: 'POST',
-// 			headers: {
-// 				'Content-Type': 'application/json',
-// 			},
-// 			body: JSON.stringify({
-// 				email: 'test@test.com',
-// 				password: 'd4Sv{3d23f',
-// 			}),
-// 		})
-
-// 		const data = await response.json()
-// 		if (!response.ok) {
-// 			throw new Error(data.message || 'Failed to register')
-// 		}
-
-// 		console.log('Registration successful:', data)
-// 	} catch (error: any) {
-// 		console.error('Error registering user:', error.message)
-// 	}
-// }
-// console.log(registerUser())
+onMounted(handleProfile)
 </script>
 
-<style scoped>
-/* Ваши стили при необходимости */
+<style lang="scss" scoped>
+@import '../assets/scss/main.scss';
+
+.auth-button {
+	color: $white_color;
+	background: transparent;
+	border: none;
+	font-size: 24px;
+	line-height: 32px;
+	font-weight: 400;
+	padding-bottom: 8px;
+}
+
+.auth-title {
+	margin-bottom: 24px;
+}
+.active {
+	border-bottom: 1.5px solid $pink_color;
+}
 </style>

@@ -1,4 +1,6 @@
-import type { Movie } from '../server/types'
+import axios from 'axios'
+import type { MovieType } from '../services/types'
+import { URL_MOVIE_RANDOM } from '../constants'
 
 export const useMovieRandom = defineStore('movieRandom', () => {
 	const movieTitle = ref('')
@@ -8,6 +10,7 @@ export const useMovieRandom = defineStore('movieRandom', () => {
 	const movieGenre = ref([])
 	const movieRuntime = ref(0)
 	const moviePoster = ref('')
+	const movieId = ref(0)
 
 	return {
 		movieTitle,
@@ -17,17 +20,18 @@ export const useMovieRandom = defineStore('movieRandom', () => {
 		movieGenre,
 		movieRuntime,
 		moviePoster,
+		movieId,
 
 		fetchMovieRandom: async () => {
-			const response = await $fetch<Movie>('/api/movieRandom')
-
-			movieTitle.value = response.title
-			moviePlot.value = response.plot
-			movieRating.value = response.tmdbRating
-			movieYear.value = response.releaseYear
-			movieGenre.value = response.genres
-			movieRuntime.value = response.runtime
-			moviePoster.value = response.posterUrl
+			const response = await axios.get<MovieType>(URL_MOVIE_RANDOM)
+			movieTitle.value = response.data.title
+			moviePlot.value = response.data.plot
+			movieRating.value = response.data.tmdbRating
+			movieYear.value = response.data.releaseYear
+			movieGenre.value = response.data.genres
+			movieRuntime.value = response.data.runtime
+			moviePoster.value = response.data.backdropUrl
+			movieId.value = response.data.id
 		},
 	}
 })

@@ -4,5 +4,21 @@ export default defineNuxtConfig({
 
 	css: ['./assets/scss/main.scss'],
 
-	modules: ['nuxt-svgo-loader', '@pinia/nuxt', '@nuxt/image'],
+	modules: [
+		'nuxt-svgo-loader',
+		'@pinia/nuxt',
+		'@nuxt/image',
+		'@vee-validate/nuxt',
+	],
+
+	app: {
+		head: {
+			link: [
+				{
+					href: 'https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap',
+					rel: 'stylesheet',
+				},
+			],
+		},
+	},
 })

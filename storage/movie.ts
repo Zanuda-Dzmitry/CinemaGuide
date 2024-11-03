@@ -1,5 +1,7 @@
+import { BASE_URL } from '~/constants'
+
 interface Movie {
-	backdropUrl: string
+	posterUrl: string | undefined
 	id: number
 	title: string
 	director: string
@@ -19,7 +21,7 @@ export const useMovies = defineStore('movies', {
 			genre: string | undefined
 		) {
 			try {
-				const { data, error } = await useFetch<Movie[]>('/api/movie', {
+				const { data, error } = await useFetch<Movie[]>(`${BASE_URL}/movie`, {
 					method: 'GET',
 					params: { count, page, title, genre },
 				})

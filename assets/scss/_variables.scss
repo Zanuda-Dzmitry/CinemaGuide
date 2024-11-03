@@ -1,6 +1,22 @@
 $white_color: #fff;
 $black_color: #000;
-$grey_color: #BDBDBD;
-$blue_color: #00BCD4;
-$red_color: #F44336;
-$brand-color: #6A5DC2;
+$grey_color: rgba(255, 255, 255, 0.7);
+$grey_color_2: rgba(255, 255, 255, 0.5);
+$blue_color: #00bcd4;
+$red_color: #f44336;
+$brand_color: #6a5dc2;
+$green_color: #308e21;
+$pink_color: rgb(220, 93, 252);
+
+$black_background: rgba(0, 0, 0, 0.5);
+$grey_background: #333333;
+$black_background_2: rgba(0, 0, 0, 0.4);
+
+$gradient_color: linear-gradient(
+	90deg,
+	#000,
+	rgba(0, 0, 0, 0.5) 20.41%,
+	transparent
+);
+
+$font: 'Play', sans-serif, cursive;

@@ -1,8 +1,13 @@
 <template>
 	<div class="wrapper container">
-		<h2>Top 10 Movie</h2>
+		<h2>Топ 10 фильмов</h2>
 		<div class="grid">
-			<NuxtLink class="card" v-for="(movie, index) in movies" :key="index">
+			<NuxtLink
+				class="card"
+				:to="`/movies/${movie.id}`"
+				v-for="(movie, index) in movies"
+				:key="index"
+			>
 				<span>{{ index + 1 }}</span>
 				<img class="movie_poster" :src="movie.posterUrl" alt="Poster" />
 			</NuxtLink>
@@ -14,6 +19,7 @@
 import { useMovieTop10 } from '~/storage/movieTop10'
 
 interface Movie {
+	id: number
 	posterUrl: string
 }
 
@@ -35,6 +41,9 @@ const movies = computed(() => data.value)
 	h2 {
 		color: $white_color;
 		margin-bottom: 64px;
+		font-size: 40px;
+		line-height: 48px;
+		font-weight: 700;
 	}
 	.grid {
 		display: grid;

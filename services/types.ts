@@ -1,4 +1,4 @@
-export type Movie = {
+export type MovieType = {
 	awardsSummary: string
 	production: string
 	director: string
@@ -16,6 +16,13 @@ export type Movie = {
 	backdropUrl: string
 	trailerUrl: string
 	tmdbRating: number
+}
+
+export type User = {
+	email: string
+	name: string
+	surname: string
+	favorites: string[]
 }
 
 export type Genre = {
