@@ -2,36 +2,36 @@ import axios from 'axios'
 import type { MovieType } from '../services/types'
 import { URL_MOVIE_RANDOM } from '../constants'
 
-export const useMovieRandom = defineStore('movieRandom', () => {
-	const movieTitle = ref('')
-	const moviePlot = ref('')
-	const movieRating = ref(0)
-	const movieYear = ref(0)
-	const movieGenre = ref([])
-	const movieRuntime = ref(0)
-	const moviePoster = ref('')
-	const movieId = ref(0)
+export const useMovieRandom = defineStore('movieRandom', {
+	state: () => ({
+		movieTitle: '',
+		moviePlot: '',
+		movieRating: 0,
+		movieYear: 0,
+		movieGenre: [],
+		movieRuntime: 0,
+		movieBackdrop: '',
+		movieId: 0,
+	}),
 
-	return {
-		movieTitle,
-		moviePlot,
-		movieRating,
-		movieYear,
-		movieGenre,
-		movieRuntime,
-		moviePoster,
-		movieId,
-
-		fetchMovieRandom: async () => {
-			const response = await axios.get<MovieType>(URL_MOVIE_RANDOM)
-			movieTitle.value = response.data.title
-			moviePlot.value = response.data.plot
-			movieRating.value = response.data.tmdbRating
-			movieYear.value = response.data.releaseYear
-			movieGenre.value = response.data.genres
-			movieRuntime.value = response.data.runtime
-			moviePoster.value = response.data.backdropUrl
-			movieId.value = response.data.id
+	actions: {
+		async fetchMovieRandom() {
+			try {
+				const response = await axios.get<MovieType>(URL_MOVIE_RANDOM)
+				this.movieTitle = response.data.title
+				this.moviePlot = response.data.plot
+				this.movieRating = response.data.tmdbRating
+				this.movieYear = response.data.releaseYear
+				this.movieGenre = response.data.genres
+				this.movieRuntime = response.data.runtime
+				this.movieBackdrop = response.data.backdropUrl
+				this.movieId = response.data.id
+			} catch (error) {
+				console.error('Ошибка при получении данных о фильме:', error)
+			}
 		},
-	}
+		refreshMovieData() {
+			return this.fetchMovieRandom()
+		},
+	},
 })

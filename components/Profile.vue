@@ -8,7 +8,7 @@
 				@click="currentSlot = 'favorites'"
 				:class="{ active: currentSlot === 'favorites' }"
 			>
-				<favorites />
+				<favoritesSvg />
 				Избранные фильмы
 			</button>
 			<button
@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 import profile from '../assets/icons/profile.svg?component'
-import favorites from '../assets/icons/favorites.svg?component'
+import favoritesSvg from '../assets/icons/icon_favorite.svg?component'
 
 useHead({
 	title: () => 'Profile',

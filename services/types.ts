@@ -13,6 +13,7 @@ export type MovieType = {
 	plot: string
 	runtime: number
 	posterUrl: string
+	movieBackdropUrl: string
 	backdropUrl: string
 	trailerUrl: string
 	tmdbRating: number

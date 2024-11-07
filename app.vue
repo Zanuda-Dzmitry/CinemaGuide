@@ -1,13 +1,13 @@
 <template>
-  <NuxtLayout>
-    <NuxtPage />
-  </NuxtLayout>
+	<NuxtLayout>
+		<NuxtPage />
+	</NuxtLayout>
 </template>
 
 <script setup lang="ts">
- const route = useRoute()
- const title = computed(() => `${route.meta.title}`)
+const route = useRoute()
+const title = computed(() => `${route.meta.title}`)
 useHead({
-  title: title,
+	title: title,
 })
 </script>

@@ -1,6 +1,12 @@
 import axios from 'axios'
 import type { User } from '~/services/types'
-import { URL_LOGIN, URL_REGISTER, URL_PROFILE, URL_LOGOUT } from '~/constants'
+import {
+	URL_LOGIN,
+	URL_REGISTER,
+	URL_PROFILE,
+	URL_LOGOUT,
+	URL_FAVORITES,
+} from '~/constants'
 
 export const useAuthStore = defineStore('auth', {
 	state: () => ({
@@ -71,6 +77,42 @@ export const useAuthStore = defineStore('auth', {
 			this.user = response.data
 
 			return this.user
+		},
+
+		async addFavorites(id: string) {
+			try {
+				await axios.post(
+					URL_FAVORITES,
+					{
+						id: id,
+					},
+					{
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						withCredentials: true, // Включаем cookies в запрос
+					}
+				)
+				this.user?.favorites.push(id) // Обновляем локальный массив favorites
+			} catch (error) {
+				console.error('Ошибка добавления в избранное:', error)
+				throw error
+			}
+		},
+		async removeFavorites(id: string) {
+			try {
+				await axios.delete(`${URL_FAVORITES}/${id}`, {
+					withCredentials: true,
+				})
+				if (this.user) {
+					this.user.favorites = this.user.favorites.filter(
+						favoriteId => favoriteId !== id
+					) // Обновляем локальный массив favorites
+				}
+			} catch (error) {
+				console.error('Ошибка при удалении из избранного:', error)
+				throw error
+			}
 		},
 
 		async logout() {

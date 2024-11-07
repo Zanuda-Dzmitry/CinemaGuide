@@ -9,12 +9,15 @@
 		<div class="genre_wrapper">
 			<NuxtLink
 				class="genre_link"
-				v-for="movie in movies"
+				v-for="movie in displayedMovies"
 				:key="movie.id"
 				:to="`/movies/${movie.id}`"
 			>
 				<NuxtImg :src="movie.posterUrl" />
 			</NuxtLink>
+		</div>
+		<div class="genre_more-wrapper">
+			<button class="genre_more" @click="loadMoreMovies">Показать еще</button>
 		</div>
 	</section>
 </template>
@@ -23,21 +26,39 @@
 import { useMovies } from '~/storage/movie'
 import back from '../assets/icons/back.svg?component'
 
+const store = useMovies()
 const route = useRoute()
 const id = computed(() => route.params.id as string)
+const PAGE_SIZE = 10
+const page = ref(1)
+const hasMoreMovies = ref(true)
+const isLoading = ref(false)
 
 useHead({
 	title: () => `Жанр: ${id.value}`,
 })
 
-const store = useMovies()
+const loadMovies = async () => {
+	isLoading.value = true // начало загрузки
+	await store.loadMovies(PAGE_SIZE, page.value, '', id.value)
+	const totalMovies = store.movies.length // Общее количество фильмов
+	console.log(totalMovies)
+	hasMoreMovies.value = store.hasMoreMovies(page.value, PAGE_SIZE)
+	isLoading.value = false // завершение загрузки
+}
 
-const { data: movies } = await useAsyncData('movies', async () => {
-	await store.loadMovies(10, 1, '', id.value)
-	return store.getMoviesByGenre(id.value) // Фильтруем фильмы по жанру
+watchEffect(async () => {
+	await loadMovies()
 })
 
-console.log(movies)
+const loadMoreMovies = async () => {
+	page.value++
+	await loadMovies()
+}
+
+const displayedMovies = computed(() => {
+	return store.getMoviesByGenre(id.value).slice(0, PAGE_SIZE * page.value)
+})
 </script>
 
 <style lang="scss" scoped>
@@ -70,6 +91,7 @@ console.log(movies)
 		display: grid;
 		grid-template-columns: repeat(auto-fill, 224px);
 		gap: 64px 40px;
+		padding-bottom: 64px;
 
 		.genre_link {
 			border: 1px solid rgba(255, 255, 255, 0.25);
@@ -81,6 +103,21 @@ console.log(movies)
 				border-radius: 24px;
 				object-fit: cover;
 			}
+		}
+	}
+
+	.genre_more-wrapper {
+		display: flex;
+		justify-content: center;
+		.genre_more {
+			color: $white_color;
+			background: $brand_color;
+			border-radius: 28px;
+			padding: 16px 48px;
+			font-size: 18px;
+			font-weight: 700;
+			line-height: 24px;
+			border: none;
 		}
 	}
 }

@@ -3,26 +3,22 @@
 		<button
 			class="auth-button"
 			:class="{ active: isPathActive('/profile') }"
-			@click="user ? router.push('/profile') : toggleModal()"
+			@click="user ? router.push('/profile') : modalState.toggleModal()"
 		>
 			{{ user ? user.name : 'Вход' }}
 		</button>
-		<Modal
-			v-if="isModalOpen"
-			@close="toggleModal"
-			:toggle-modal="toggleModal"
-		/>
+		<Modal v-if="modalState.isModalOpen" @close="modalState.toggleModal" />
 	</div>
 </template>
 
 <script lang="ts" setup>
 import { useAuthStore } from '@/storage/auth'
 import { useRouter } from 'vue-router'
+import modalState from '~/utils/modalStore'
 
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
-const isModalOpen = ref(false)
 const user = computed(() => authStore.user)
 
 const errorMessage = ref('')
@@ -30,10 +26,6 @@ const isPathActive = (path: string) => {
 	return route.path === path
 }
 onMounted(isPathActive)
-
-const toggleModal = () => {
-	isModalOpen.value = !isModalOpen.value
-}
 
 const handleProfile = async () => {
 	try {

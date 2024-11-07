@@ -89,17 +89,15 @@ import logoSvg from '../assets/icons/CinemaGuide.svg?component'
 import closeSvg from '../assets/icons/close.svg?component'
 import { type SubmissionHandler, type GenericObject } from 'vee-validate'
 import * as yup from 'yup'
+import modalState from '~/utils/modalStore'
 
 const authStore = useAuthStore()
 const isLogin = ref(true) // состояние для определения, находимся ли мы на экране логина
 const errorMessage = ref('')
 const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
 
-const props = defineProps<{
-	toggleModal: () => void // Объявление пропса
-}>()
 const close = () => {
-	props.toggleModal()
+	modalState.toggleModal()
 }
 
 const switchToRegister = () => {
