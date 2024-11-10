@@ -4,20 +4,22 @@
 			<NuxtLink class="genre_nav-link" :to="`/genres`">
 				<back />
 			</NuxtLink>
-			<h2 class="genre_title">{{ id }}</h2>
+			<h2 class="genre_title">{{ selectedGenre }}</h2>
 		</div>
 		<div class="genre_wrapper">
 			<NuxtLink
 				class="genre_link"
-				v-for="movie in displayedMovies"
+				v-for="movie in movies"
 				:key="movie.id"
 				:to="`/movies/${movie.id}`"
 			>
 				<NuxtImg :src="movie.posterUrl" />
 			</NuxtLink>
 		</div>
-		<div class="genre_more-wrapper">
-			<button class="genre_more" @click="loadMoreMovies">Показать еще</button>
+		<div v-if="hasMoreMovies" class="genre_more-wrapper">
+			<button :disabled="isLoading" class="genre_more" @click="loadMoreMovies">
+				{{ isLoading ? 'Загрузка...' : 'Показать еще' }}
+			</button>
 		</div>
 	</section>
 </template>
@@ -26,38 +28,39 @@
 import { useMovies } from '~/storage/movie'
 import back from '../assets/icons/back.svg?component'
 
+// Используем store фильмов
 const store = useMovies()
 const route = useRoute()
-const id = computed(() => route.params.id as string)
+const selectedGenre = computed(() => route.params.id as string)
+
+const movies = computed(() => store.movies)
 const PAGE_SIZE = 10
 const page = ref(1)
 const hasMoreMovies = ref(true)
 const isLoading = ref(false)
 
+// Установка заголовка страницы
 useHead({
-	title: () => `Жанр: ${id.value}`,
+	title: () => `Жанр: ${selectedGenre.value}`,
 })
 
-const loadMovies = async () => {
-	isLoading.value = true // начало загрузки
-	await store.loadMovies(PAGE_SIZE, page.value, '', id.value)
-	const totalMovies = store.movies.length // Общее количество фильмов
-	console.log(totalMovies)
-	hasMoreMovies.value = store.hasMoreMovies(page.value, PAGE_SIZE)
-	isLoading.value = false // завершение загрузки
-}
-
-watchEffect(async () => {
-	await loadMovies()
+onMounted(async () => {
+	await store.loadMovies(PAGE_SIZE, page.value, '', selectedGenre.value) // Загружаем фильмы
 })
 
+// Функция загрузки дополнительных фильмов
 const loadMoreMovies = async () => {
-	page.value++
-	await loadMovies()
+	if (!hasMoreMovies.value) return // Если фильмов больше нет, не продолжаем
+	isLoading.value = true // Устанавливаем состояние загрузки
+	page.value++ // Увеличиваем номер страницы
+	await store.loadMovies(PAGE_SIZE, page.value, '', selectedGenre.value)
+	isLoading.value = false // Отключаем состояние загрузки
 }
 
-const displayedMovies = computed(() => {
-	return store.getMoviesByGenre(id.value).slice(0, PAGE_SIZE * page.value)
+// Очистка данных при выходе со страницы
+onBeforeUnmount(() => {
+	store.movies = [] // Очищаем массив фильмов
+	page.value = 1 // Сбрасываем номер страницы
 })
 </script>
 
