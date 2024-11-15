@@ -1,3 +1,22 @@
+<template>
+	<div>
+		<NuxtLink class="logo" to="/">
+			<CinemaGuideSvg />
+		</NuxtLink>
+	</div>
+	<div class="nav">
+		<NuxtLink class="nav-link" v-for="item in items" :to="item.to">{{
+			item.name
+		}}</NuxtLink>
+	</div>
+	<div class="search">
+		<SearchMovie />
+	</div>
+	<div>
+		<AuthButton />
+	</div>
+</template>
+
 <script setup lang="ts">
 import CinemaGuideSvg from '../assets/icons/CinemaGuide.svg?component'
 import AuthButton from './AuthButton.vue'
@@ -13,22 +32,6 @@ const items = [
 	{ to: '/genres', name: 'Жанры', active: isPathActive('/genres') },
 ]
 </script>
-
-<template>
-	<div>
-		<NuxtLink class="logo" to="/">
-			<CinemaGuideSvg />
-		</NuxtLink>
-	</div>
-	<div class="nav">
-		<NuxtLink class="nav-link" v-for="item in items" :to="item.to">{{
-			item.name
-		}}</NuxtLink>
-	</div>
-	<div>
-		<AuthButton />
-	</div>
-</template>
 
 <style lang="scss" scoped>
 @import '../assets/scss/main.scss';

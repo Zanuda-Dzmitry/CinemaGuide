@@ -4,7 +4,7 @@
 			<div class="movie_left-top">
 				<span class="movie_rating">
 					<icon_star />
-					{{ rating }}</span
+					{{ rating.toFixed(1) }}</span
 				>
 				<span>{{ year }}</span>
 				<span v-for="genre in genres" :key="genre">{{ genre }}</span>
@@ -111,6 +111,11 @@ const refreshMovie = async () => {
 				background: $green_color;
 				padding: 4px 12px;
 				border-radius: 16px;
+
+				svg {
+					width: 16px;
+					height: 16px;
+				}
 			}
 		}
 
