@@ -7,7 +7,6 @@
 		>
 			{{ user ? user.name : 'Вход' }}
 		</button>
-		<Modal v-if="modalState.isModalOpen" @close="modalState.toggleModal" />
 	</div>
 </template>
 
@@ -38,10 +37,11 @@ onMounted(handleProfile)
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/scss/main.scss';
+@use '../assets/scss/main';
+@use '../assets/scss/variables';
 
 .auth-button {
-	color: $white_color;
+	color: variables.$white_color;
 	background: transparent;
 	border: none;
 	font-size: 24px;
@@ -54,6 +54,6 @@ onMounted(handleProfile)
 	margin-bottom: 24px;
 }
 .active {
-	border-bottom: 1.5px solid $pink_color;
+	border-bottom: 1.5px solid variables.$pink_color;
 }
 </style>

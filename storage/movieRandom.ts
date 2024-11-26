@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { MovieType } from '../services/types'
+import type { MovieType } from '../services/types/types'
 import { URL_MOVIE_RANDOM } from '../constants'
 
 export const useMovieRandom = defineStore('movieRandom', {
@@ -12,6 +12,7 @@ export const useMovieRandom = defineStore('movieRandom', {
 		movieRuntime: 0,
 		movieBackdrop: '',
 		movieId: 0,
+		movieTrailerYouTubeId: '',
 	}),
 
 	actions: {
@@ -26,6 +27,7 @@ export const useMovieRandom = defineStore('movieRandom', {
 				this.movieRuntime = response.data.runtime
 				this.movieBackdrop = response.data.backdropUrl
 				this.movieId = response.data.id
+				this.movieTrailerYouTubeId = response.data.trailerYouTubeId
 			} catch (error) {
 				console.error('Ошибка при получении данных о фильме:', error)
 			}

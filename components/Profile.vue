@@ -40,9 +40,11 @@ const currentSlot = ref('favorites') // По умолчанию показыва
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/scss/main.scss';
+@use '../assets/scss/main';
+@use '../assets/scss/variables';
+
 h2 {
-	color: $white_color;
+	color: variables.$white_color;
 	padding-top: 64px;
 	padding-bottom: 64px;
 	font-size: 48px;
@@ -55,8 +57,8 @@ h2 {
 	column-gap: 68px;
 	padding-bottom: 64px;
 	.nav-link {
-		color: $white_color;
-		background: $black_color;
+		color: variables.$white_color;
+		background: variables.$black_color;
 		border: none;
 		font-size: 24px;
 		line-height: 32px;
@@ -66,11 +68,11 @@ h2 {
 		svg {
 			position: relative;
 			bottom: -3px;
-			fill: $white_color;
+			fill: variables.$white_color;
 		}
 
 		&.active {
-			border-bottom: 1.5px solid $pink_color;
+			border-bottom: 1.5px solid variables.$pink_color;
 		}
 	}
 }

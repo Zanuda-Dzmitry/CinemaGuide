@@ -65,7 +65,8 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/scss/main.scss';
+@use '../assets/scss/main';
+@use '../assets/scss/variables';
 .genre {
 	padding-top: 64px;
 
@@ -86,7 +87,7 @@ onBeforeUnmount(() => {
 			font-size: 48px;
 			line-height: 56px;
 			font-weight: 700;
-			color: $white_color;
+			color: variables.$white_color;
 		}
 	}
 
@@ -101,7 +102,7 @@ onBeforeUnmount(() => {
 			box-shadow: 0px 0px 80px 0px rgba(255, 255, 255, 0.33);
 			height: 336px;
 			border-radius: 24px;
-			background-color: $white_color;
+			background-color: variables.$white_color;
 			img {
 				border-radius: 24px;
 				object-fit: cover;
@@ -113,8 +114,8 @@ onBeforeUnmount(() => {
 		display: flex;
 		justify-content: center;
 		.genre_more {
-			color: $white_color;
-			background: $brand_color;
+			color: variables.$white_color;
+			background: variables.$brand_color;
 			border-radius: 28px;
 			padding: 16px 48px;
 			font-size: 18px;

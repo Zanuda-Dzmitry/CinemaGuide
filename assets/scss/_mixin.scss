@@ -1,0 +1,21 @@
+@use './variables';
+
+@mixin btn_hoverFocus_1 {
+	&:hover {
+		background: variables.$brand_color_focus;
+		transition: background 0.3s ease-in-out;
+	}
+	&:focus {
+		background: variables.$brand_color_hover;
+		transition: background 0.3s ease-in-out;
+	}
+}
+
+@mixin input_hoverFocus_1 {
+	border-color: variables.$brand_color_2;
+	transition: border 0.3s ease-in-out, fill 0.3s ease-in-out;
+	fill: variables.$brand_color_2;
+	// svg {
+	// 	fill: variables.$brand_color_2;
+	// }
+}

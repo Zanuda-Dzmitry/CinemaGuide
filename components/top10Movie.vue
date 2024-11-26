@@ -33,13 +33,14 @@ const movies = computed(() => data.value)
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/scss/main.scss';
+@use '../assets/scss/main';
+@use '../assets/scss/variables';
 
 .wrapper {
 	padding-top: 40px;
 
 	h2 {
-		color: $white_color;
+		color: variables.$white_color;
 		margin-bottom: 64px;
 		font-size: 40px;
 		line-height: 48px;
@@ -60,9 +61,9 @@ const movies = computed(() => data.value)
 				top: -10px;
 				left: -10px;
 				display: block;
-				color: $brand-color;
+				color: variables.$brand-color;
 				font-size: 24px;
-				background-color: $white_color;
+				background-color: variables.$white_color;
 				padding: 8px 24px 8px 24px;
 				border-radius: 50px;
 			}

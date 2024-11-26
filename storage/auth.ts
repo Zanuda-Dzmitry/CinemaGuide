@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { User } from '~/services/types'
+import type { User } from '~/services/types/types'
 import {
 	URL_LOGIN,
 	URL_REGISTER,

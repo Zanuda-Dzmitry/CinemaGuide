@@ -1,4 +1,4 @@
-import type { MovieType } from '../services/types'
+import type { MovieType } from '../services/types/types'
 import { URL_MOVIE } from '~/constants'
 import axios from 'axios'
 
@@ -19,6 +19,7 @@ export const useMovieId = defineStore('movie', {
 		movieDirector: '',
 		movieProduction: '',
 		movieAwardsSummary: '',
+		movieTrailerYouTubeId: '',
 	}),
 
 	actions: {
@@ -39,6 +40,7 @@ export const useMovieId = defineStore('movie', {
 			this.movieDirector = response.data.director
 			this.movieProduction = response.data.production
 			this.movieAwardsSummary = response.data.awardsSummary
+			this.movieTrailerYouTubeId = response.data.trailerYouTubeId
 		},
 	},
 })

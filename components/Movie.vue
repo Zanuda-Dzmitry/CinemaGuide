@@ -15,16 +15,16 @@
 				<p>{{ plot }}</p>
 			</div>
 			<div class="movie_left-bottom">
-				<NuxtLink class="movie_trailer"> Треилер</NuxtLink>
+				<button @click="openVideoPlayer" class="movie_trailer">Треилер</button>
 				<NuxtLink v-if="isHomePage" :to="`/movies/${id}`"> О фильме</NuxtLink>
-				<button @click="toggleFavorites(id.toString())">
+				<button class="favorite_btn" @click="toggleFavorites(id.toString())">
 					<favoritesSvg
 						class="favorite"
 						:class="{ favoriteFill: isFavorite }"
 					/>
 				</button>
-				<button v-if="isHomePage" class="update" @click="refreshMovie">
-					<updateSvg />
+				<button v-if="isHomePage" class="update_btn" @click="refreshMovie">
+					<updateSvg class="update_svg" />
 				</button>
 			</div>
 		</div>
@@ -32,6 +32,7 @@
 			<NuxtImg :src="backdrop" alt="Backdrop" />
 		</div>
 	</section>
+	<VideoPlayer :videoId="videoId" :close="close" />
 </template>
 <script lang="ts" setup>
 import icon_star from '../assets/icons/icon_star.svg?component'
@@ -44,6 +45,7 @@ import { useMovieRandom } from '~/storage/movieRandom'
 const randomStore = useMovieRandom()
 const route = useRoute()
 const authStore = useAuthStore()
+const videoId = ref('')
 
 const props = defineProps<{
 	id: number
@@ -54,6 +56,7 @@ const props = defineProps<{
 	genres: string[]
 	runtime: number
 	backdrop: string
+	youTubeId: string
 }>()
 
 const isHomePage = computed(() => {
@@ -81,9 +84,19 @@ const toggleFavorites = async (movieId: string) => {
 const refreshMovie = async () => {
 	await randomStore.refreshMovieData()
 }
+
+const openVideoPlayer = () => {
+	videoId.value = props.youTubeId
+}
+
+const close = () => {
+	videoId.value = ''
+}
 </script>
 <style lang="scss" scoped>
-@import '../assets/scss/main.scss';
+@use '../assets/scss/main';
+@use '../assets/scss/variables';
+@use '../assets/scss/mixin';
 
 .movie {
 	position: relative;
@@ -102,13 +115,13 @@ const refreshMovie = async () => {
 				font-size: 18px;
 				line-height: 24px;
 				font-weight: 700;
-				color: $grey_color;
+				color: variables.$grey_color;
 			}
 			.movie_rating {
 				display: flex;
 				align-items: center;
 				column-gap: 4px;
-				background: $green_color;
+				background: variables.$green_color;
 				padding: 4px 12px;
 				border-radius: 16px;
 
@@ -123,7 +136,7 @@ const refreshMovie = async () => {
 			padding-bottom: 60px;
 
 			h2 {
-				color: $white_color;
+				color: variables.$white_color;
 				padding-bottom: 16px;
 				font-size: 48px;
 				line-height: 56px;
@@ -131,7 +144,7 @@ const refreshMovie = async () => {
 			}
 
 			p {
-				color: $grey_color;
+				color: variables.$grey_color;
 				font-size: 24px;
 				line-height: 32px;
 				font-weight: 400;
@@ -144,7 +157,16 @@ const refreshMovie = async () => {
 			column-gap: 16px;
 
 			.movie_trailer {
-				background: $brand_color;
+				background: variables.$brand_color;
+				border-radius: 28px;
+				border: 0;
+				padding: 16px 48px;
+				font-size: 18px;
+				font-weight: 700;
+				line-height: 24px;
+				color: variables.$white_color;
+
+				@include mixin.btn_hoverFocus_1;
 			}
 			a {
 				background: #333333;
@@ -154,13 +176,27 @@ const refreshMovie = async () => {
 				font-size: 18px;
 				font-weight: 700;
 				line-height: 24px;
-				color: $white_color;
+				color: variables.$white_color;
+
+				&:hover {
+					background: variables.$grey_color_hover;
+					color: variables.$grey_color_2;
+					transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+				}
+				&:focus {
+					background: variables.$white_color;
+					color: variables.$black_color;
+					transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+				}
 			}
-			button {
-				background: $grey_background;
+
+			.update_btn,
+			.favorite_btn {
+				background: variables.$grey_background;
 				border-radius: 28px;
 				border: 0;
 				padding: 15px 24px;
+
 				svg {
 					width: 24px;
 					height: 24px;
@@ -168,11 +204,51 @@ const refreshMovie = async () => {
 
 				.favorite {
 					fill: transparent;
-					stroke: $white_color;
+					stroke: variables.$white_color;
 				}
 				.favoriteFill {
-					fill: $brand_color_2;
-					stroke: $brand_color_2;
+					fill: variables.$brand_color_2;
+					stroke: variables.$brand_color_2;
+				}
+				.update_svg {
+					fill: variables.$white_color;
+				}
+			}
+
+			.favorite_btn {
+				&:hover {
+					background: variables.$grey_color_hover;
+					transition: background 0.3s ease-in-out, stroke 0.3s ease-in-out;
+
+					.favorite {
+						stroke: variables.$grey_color_2;
+					}
+				}
+				&:focus {
+					background: variables.$white_color;
+					transition: background 0.3s ease-in-out, stroke 0.3s ease-in-out;
+
+					.favorite {
+						stroke: variables.$black_color;
+					}
+				}
+			}
+			.update_btn {
+				&:hover {
+					background: variables.$grey_color_hover;
+					transition: background 0.3s ease-in-out, fill 0.3s ease-in-out;
+
+					.update_svg {
+						fill: variables.$grey_color_2;
+					}
+				}
+				&:focus {
+					background: variables.$white_color;
+					transition: background 0.3s ease-in-out, fill 0.3s ease-in-out;
+
+					.update_svg {
+						fill: variables.$black_color;
+					}
 				}
 			}
 		}
@@ -194,7 +270,7 @@ const refreshMovie = async () => {
 			object-fit: cover;
 		}
 		&::after {
-			background: $gradient_color;
+			background: variables.$gradient_color;
 			content: '';
 			height: 100%;
 			left: 0;

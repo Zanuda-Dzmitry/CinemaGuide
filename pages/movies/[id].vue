@@ -8,7 +8,9 @@
 		:genres="genres"
 		:runtime="runtime"
 		:backdrop="backdrop"
+		:youTubeId="youTubeId || ''"
 	/>
+
 	<section class="movie_about container">
 		<div class="movie_info">
 			<h2>О фильме</h2>
@@ -68,6 +70,7 @@ const { data } = useAsyncData('movieId', async () => {
 		movieDirector: store.movieDirector,
 		movieProduction: store.movieProduction,
 		movieAwardsSummary: store.movieAwardsSummary,
+		movieTrailerYouTubeId: store.movieTrailerYouTubeId,
 	}
 })
 
@@ -86,6 +89,7 @@ const revenue = computed(() => data.value?.movieRevenue)
 const director = computed(() => data.value?.movieDirector)
 const production = computed(() => data.value?.movieProduction)
 const awardsSummary = computed(() => data.value?.movieAwardsSummary)
+const youTubeId = computed(() => data.value?.movieTrailerYouTubeId)
 
 useHead({
 	title: () => `${data.value?.movieTitle}`,
@@ -93,7 +97,8 @@ useHead({
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/scss/main.scss';
+@use '../assets/scss/main';
+@use '../assets/scss/variables';
 
 .movie_about {
 	.movie_info {
@@ -101,7 +106,7 @@ useHead({
 			font-size: 40px;
 			line-height: 48px;
 			font-weight: 700;
-			color: $white_color;
+			color: variables.$white_color;
 			padding-bottom: 64px;
 		}
 
@@ -114,7 +119,7 @@ useHead({
 			display: flex;
 			column-gap: 8px;
 
-			color: $grey_color;
+			color: variables.$grey_color;
 
 			.movie_info-title {
 				display: inline-flex;
@@ -127,7 +132,7 @@ useHead({
 				&::after {
 					content: '';
 					width: 100%;
-					border-bottom: 1px dashed $grey_color;
+					border-bottom: 1px dashed variables.$grey_color;
 				}
 			}
 		}

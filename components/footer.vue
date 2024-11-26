@@ -37,7 +37,9 @@ import SocialTelegram from '../assets/icons/social_telegram.svg?component'
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/scss/main.scss';
+@use '../assets/scss/main';
+@use '../assets/scss/variables';
+
 .footer {
 	.footer_grid {
 		display: grid;
@@ -50,7 +52,7 @@ import SocialTelegram from '../assets/icons/social_telegram.svg?component'
 
 			span {
 				position: relative;
-				color: $white_color;
+				color: variables.$white_color;
 				svg {
 					position: absolute;
 					left: -30px;

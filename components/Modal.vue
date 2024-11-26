@@ -27,37 +27,76 @@
 				:class="{ 'auth-form-registration': !isLogin }"
 			>
 				<div class="input-container mail">
-					<mailSvg class="mail-svg" />
-					<Field name="email" as="input" placeholder="Электронная почта" />
+					<Field
+						v-model="email"
+						v-bind="emailAttrs"
+						name="email"
+						as="input"
+						placeholder="Электронная почта"
+						:class="{ 'input-error': errors.email }"
+					/>
+					<mailSvg class="mail-svg" :class="{ 'svg-error': errors.email }" />
 					<ErrorMessage name="email" class="error-message" />
 				</div>
 				<div class="input-container password">
-					<passwordSvg class="password-svg" />
 					<Field
+						v-model="password"
+						v-bind="passwordAttrs"
 						name="password"
 						as="input"
 						type="password"
 						placeholder="Пароль"
+						:class="{ 'input-error': errors.password }"
+					/>
+					<passwordSvg
+						class="password-svg"
+						:class="{ 'svg-error': errors.password }"
 					/>
 					<ErrorMessage name="password" class="error-message" />
 				</div>
 				<div class="input-container name" v-if="!isLogin">
-					<profileSvg class="profile-svg" />
-					<Field name="name" as="input" placeholder="Имя" />
+					<Field
+						v-model="name"
+						v-bind="nameAttrs"
+						name="name"
+						as="input"
+						placeholder="Имя"
+						:class="{ 'input-error': errors.name }"
+					/>
+					<profileSvg
+						class="profile-svg"
+						:class="{ 'svg-error': errors.name }"
+					/>
 					<ErrorMessage name="name" class="error-message" />
 				</div>
 				<div class="input-container surname" v-if="!isLogin">
-					<profileSvg class="profile-svg" />
-					<Field name="surname" as="input" placeholder="Фамилия" />
+					<Field
+						v-model="surname"
+						v-bind="surnameAttrs"
+						name="surname"
+						as="input"
+						placeholder="Фамилия"
+						:class="{ 'input-error': errors.surname }"
+					/>
+					<profileSvg
+						class="profile-svg"
+						:class="{ 'svg-error': errors.surname }"
+					/>
 					<ErrorMessage name="surname" class="error-message" />
 				</div>
 				<div class="input-container confirm-password" v-if="!isLogin">
-					<passwordSvg class="password-svg" />
 					<Field
+						v-model="confirmPassword"
+						v-bind="confirmPasswordAttrs"
 						name="confirmPassword"
 						as="input"
 						type="password"
 						placeholder="Подтвердите пароль"
+						:class="{ 'input-error': errors.confirmPassword }"
+					/>
+					<passwordSvg
+						class="password-svg"
+						:class="{ 'svg-error': errors.confirmPassword }"
 					/>
 					<ErrorMessage name="confirmPassword" class="error-message" />
 				</div>
@@ -87,7 +126,11 @@ import mailSvg from '../assets/icons/icon_mail.svg?component'
 import profileSvg from '../assets/icons/profile.svg?component'
 import logoSvg from '../assets/icons/CinemaGuide.svg?component'
 import closeSvg from '../assets/icons/close.svg?component'
-import { type SubmissionHandler, type GenericObject } from 'vee-validate'
+import {
+	type SubmissionHandler,
+	type GenericObject,
+	useForm,
+} from 'vee-validate'
 import * as yup from 'yup'
 import modalState from '~/utils/modalStore'
 
@@ -96,10 +139,12 @@ const isLogin = ref(true) // состояние для определения, �
 const errorMessage = ref('')
 const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
 
+// // Флаг, указывающий, какая схема использовать
+// const isRegistration = false
+
 const close = () => {
 	modalState.toggleModal()
 }
-
 const switchToRegister = () => {
 	isLogin.value = false // переключаем на регистрацию
 }
@@ -143,6 +188,16 @@ const loginSchema = yup.object({
 		.required('Пароль обязателен'),
 })
 
+const { errors, defineField } = useForm({
+	validationSchema: registrationSchema,
+})
+
+const [email, emailAttrs] = defineField('email')
+const [password, passwordAttrs] = defineField('password')
+const [name, nameAttrs] = defineField('name')
+const [surname, surnameAttrs] = defineField('surname')
+const [confirmPassword, confirmPasswordAttrs] = defineField('confirmPassword')
+
 const onSubmit: SubmissionHandler<
 	{ email: string; password: string; name: string; surname: string },
 	GenericObject,
@@ -171,7 +226,10 @@ const onSubmit: SubmissionHandler<
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/scss/main.scss';
+@use '../assets/scss/main';
+@use '../assets/scss/variables';
+@use '../assets/scss/mixin';
+
 .modal-overlay {
 	overflow-y: auto;
 	position: fixed;
@@ -192,7 +250,7 @@ const onSubmit: SubmissionHandler<
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		background: $white_color;
+		background: variables.$white_color;
 		padding: 64px 40px;
 		border-radius: 24px;
 		width: 420px;
@@ -213,14 +271,14 @@ const onSubmit: SubmissionHandler<
 			top: 0;
 			width: 48px;
 			height: 48px;
-			background: $white_color;
+			background: variables.$white_color;
 			border: none;
 			border-radius: 24px;
 		}
 		.auth-form {
 			display: grid;
 			row-gap: 12px;
-			color: $white_color;
+			color: variables.$white_color;
 
 			.input-container {
 				position: relative;
@@ -229,7 +287,7 @@ const onSubmit: SubmissionHandler<
 					width: 24px;
 					height: 24px;
 					left: 16px;
-					fill: $black_background_2;
+					fill: variables.$black_background_2;
 				}
 
 				.mail-svg,
@@ -248,17 +306,30 @@ const onSubmit: SubmissionHandler<
 					font-weight: 400;
 					line-height: 24px;
 					border-radius: 8px;
-					border: 1px solid $black_background_2;
-				}
-			}
+					border: 1px solid variables.$black_background_2;
 
-			.error {
-				svg {
-					fill: $red_color;
+					&:hover {
+						@include mixin.input_hoverFocus_1;
+					}
+
+					&:focus {
+						@include mixin.input_hoverFocus_1;
+					}
 				}
 
-				input {
-					border: 1px solid $red_color;
+				input:focus + svg {
+					@include mixin.input_hoverFocus_1;
+				}
+
+				input:hover + svg {
+					@include mixin.input_hoverFocus_1;
+				}
+				.input-error {
+					border: 1px solid variables.$red_color; // Измените границу на красный, если есть ошибка
+				}
+
+				.svg-error {
+					fill: variables.$red_color; // Измените цвет SVG на красный, если есть ошибка
 				}
 			}
 
@@ -275,10 +346,11 @@ const onSubmit: SubmissionHandler<
 				}
 
 				.auth-button-login {
-					color: $white_color;
-					background: $brand_color;
+					color: variables.$white_color;
+					background: variables.$brand_color;
 					border-radius: 28px;
 					padding: 16px 48px;
+					@include mixin.btn_hoverFocus_1;
 				}
 			}
 		}
@@ -308,7 +380,7 @@ const onSubmit: SubmissionHandler<
 			}
 		}
 		.error-message {
-			color: $red_color;
+			color: variables.$red_color;
 		}
 
 		.success-message {
@@ -324,8 +396,8 @@ const onSubmit: SubmissionHandler<
 			}
 			button {
 				width: 100%;
-				color: $white_color;
-				background: $brand_color;
+				color: variables.$white_color;
+				background: variables.$brand_color;
 				border-radius: 28px;
 				padding: 16px 48px;
 				font-size: 18px;

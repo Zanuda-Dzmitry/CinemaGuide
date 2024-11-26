@@ -1,4 +1,5 @@
 export type MovieType = {
+	trailerYouTubeId: string
 	awardsSummary: string
 	production: string
 	director: string

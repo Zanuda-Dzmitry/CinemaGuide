@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import modalState from '~/utils/modalStore'
+</script>
 
 <template>
 	<div>
@@ -7,13 +9,15 @@
 		</div>
 		<main class="main container">
 			<slot />
+			<Modal v-if="modalState.isModalOpen" @close="modalState.toggleModal" />
 		</main>
 		<Footer />
 	</div>
 </template>
 
 <style lang="scss" scoped>
-@import '../assets/scss/main.scss';
+@use '../assets/scss/main';
+@use '../assets/scss/variables';
 
 .header {
 	display: flex;
@@ -21,14 +25,12 @@
 	align-items: center;
 	height: 96px;
 	backdrop-filter: blur(20px);
-	background: $black_background;
+	background: variables.$black_background;
 	position: relative;
-	z-index: 10;
 }
 
 .main {
 	padding-bottom: 120px;
 	position: relative;
-	z-index: 1;
 }
 </style>

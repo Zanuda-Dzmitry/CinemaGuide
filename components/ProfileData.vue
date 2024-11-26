@@ -86,7 +86,9 @@ const handleLogout = async () => {
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/scss/main.scss';
+@use '../assets/scss/main';
+@use '../assets/scss/variables';
+@use '../assets/scss/mixin';
 
 .movie_list {
 	display: grid;
@@ -97,8 +99,8 @@ const handleLogout = async () => {
 	.movie_link {
 		display: block;
 		height: 336px;
-		border: 1px solid rgba(255, 255, 255, 0.25);
-		box-shadow: 0px 0px 80px 0px rgba(255, 255, 255, 0.33);
+		border: 1px solid variables.$grey_color_4;
+		box-shadow: 0px 0px 80px 0px variables.$grey_color_5;
 		border-radius: 24px;
 
 		img {
@@ -110,7 +112,7 @@ const handleLogout = async () => {
 }
 
 p {
-	color: $white_color;
+	color: variables.$white_color;
 }
 
 .user_info {
@@ -121,7 +123,7 @@ p {
 
 	.user_info-item {
 		position: relative;
-		color: $white_color;
+		color: variables.$white_color;
 		display: flex;
 		flex-direction: column;
 		padding-left: 76px;
@@ -134,14 +136,14 @@ p {
 			justify-content: center;
 			width: 60px;
 			height: 60px;
-			background: $grey_color_2;
+			background: variables.$grey_color_2;
 			border-radius: 50%;
 			font-size: 24px;
 			line-height: 32px;
 			font-weight: 700;
 
 			svg {
-				fill: $white_color;
+				fill: variables.$white_color;
 			}
 		}
 
@@ -164,9 +166,10 @@ p {
 	line-height: 24px;
 	font-weight: 700;
 	padding: 16px 48px;
-	color: $white_color;
-	background: $brand_color;
+	color: variables.$white_color;
+	background: variables.$brand_color;
 	border: none;
 	border-radius: 28px;
+	@include mixin.btn_hoverFocus_1;
 }
 </style>

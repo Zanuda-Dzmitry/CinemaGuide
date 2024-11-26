@@ -34,7 +34,9 @@ const items = [
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/scss/main.scss';
+@use '../assets/scss/main';
+@use '../assets/scss/variables';
+
 .logo {
 	border: none !important;
 
@@ -50,12 +52,12 @@ const items = [
 	.nav-link {
 		text-decoration: none;
 		font-size: 24px;
-		color: #fff;
+		color: variables.$white_color;
 		padding-bottom: 8px;
 	}
 }
 
 .router-link-active {
-	border-bottom: 1.5px solid $pink_color;
+	border-bottom: 1.5px solid variables.$pink_color;
 }
 </style>

@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import { genrePosters } from '~/constants'
 import { useMovieGenre } from '../storage/movieGenre'
-import type { Genre } from '../services/types'
+import type { Genre } from '../services/types/types'
 
 const store = useMovieGenre()
 const { data } = useAsyncData<Genre[]>('movieGenre', async () => {
@@ -33,7 +33,8 @@ const getPoster = (poster: string | number) => genrePosters[poster] ?? ''
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/scss/main.scss';
+@use '../assets/scss/main';
+@use '../assets/scss/variables';
 
 .genre {
 	padding-top: 64px;
@@ -42,7 +43,7 @@ const getPoster = (poster: string | number) => genrePosters[poster] ?? ''
 		font-size: 48px;
 		line-height: 56px;
 		font-weight: 700;
-		color: $white_color;
+		color: variables.$white_color;
 		padding-bottom: 64px;
 	}
 
@@ -57,7 +58,7 @@ const getPoster = (poster: string | number) => genrePosters[poster] ?? ''
 			border: 1px solid rgba(255, 255, 255, 0.25);
 			box-shadow: 0px 0px 80px 0px rgba(255, 255, 255, 0.33);
 			border-radius: 24px;
-			background-color: $white_color;
+			background-color: variables.$white_color;
 
 			.genre_content {
 				position: absolute;
@@ -68,14 +69,14 @@ const getPoster = (poster: string | number) => genrePosters[poster] ?? ''
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				background: $black_color;
+				background: variables.$black_color;
 				border-radius: 0 0 24px 24px;
 
 				.genre_content-title {
 					font-size: 24px;
 					font-weight: 700;
 					line-height: 32px;
-					color: $white_color;
+					color: variables.$white_color;
 				}
 			}
 

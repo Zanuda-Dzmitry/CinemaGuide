@@ -69,7 +69,8 @@ watch(
 )
 </script>
 <style lang="scss" scoped>
-@import '../assets/scss/main.scss';
+@use '../assets/scss/main';
+@use '../assets/scss/variables';
 
 .search-movie {
 	position: relative;
@@ -85,8 +86,8 @@ watch(
 	input {
 		width: 100%;
 		height: 48px;
-		background: $grey_color_3;
-		color: $white_color;
+		background: variables.$grey_color_3;
+		color: variables.$white_color;
 		border: none;
 		border-radius: 8px;
 		padding: 12px 16px 12px 58px;
@@ -101,7 +102,7 @@ watch(
 	top: 72px;
 	padding: 16px 16px 16px 16px;
 	width: 100%;
-	background-color: $grey_color_3;
+	background-color: variables.$grey_color_3;
 	border-bottom-left-radius: 8px;
 	border-bottom-right-radius: 8px;
 
@@ -115,7 +116,7 @@ watch(
 			display: flex;
 			flex-direction: column;
 			row-gap: 8px;
-			color: $white_color;
+			color: variables.$white_color;
 			padding-left: 56px;
 
 			img {
@@ -136,7 +137,7 @@ watch(
 					display: flex;
 					align-items: center;
 					column-gap: 4px;
-					background: $green_color;
+					background: variables.$green_color;
 					padding: 2px 8px 2px 22px;
 					border-radius: 16px;
 

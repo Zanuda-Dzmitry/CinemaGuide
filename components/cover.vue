@@ -10,6 +10,7 @@
 			:genres="genres"
 			:runtime="runtime"
 			:backdrop="backdrop"
+			:youTubeId="youTubeId"
 		/>
 	</div>
 </template>
@@ -36,8 +37,10 @@ const genres = computed(() => store.movieGenre || [])
 const runtime = computed(() => store.movieRuntime || 0)
 const backdrop = computed(() => store.movieBackdrop || '')
 const id = computed(() => store.movieId || 0)
+const youTubeId = computed(() => store.movieTrailerYouTubeId || '')
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/scss/main.scss';
+@use '../assets/scss/main';
+@use '../assets/scss/variables';
 </style>

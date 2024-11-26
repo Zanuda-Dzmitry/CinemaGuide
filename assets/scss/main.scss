@@ -1,4 +1,4 @@
-@import './variables.scss';
+@use './variables';
 
 * {
 	margin: 0;
@@ -12,20 +12,29 @@ img {
 
 a {
 	text-decoration: none;
+	border: none;
+	outline: none;
 }
 
 ul {
 	list-style: none;
 }
 
+input {
+	border: none;
+	outline: none;
+}
+
 button {
+	border: none;
+	outline: none;
 	cursor: pointer;
 }
 
 body {
 	max-width: 1440px;
 	background: rgba(0, 0, 0, 1);
-	font-family: $font;
+	font-family: variables.$font;
 	margin: 0 auto;
 	padding: 0;
 	overflow-x: hidden;
