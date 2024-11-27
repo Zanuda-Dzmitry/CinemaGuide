@@ -9,47 +9,15 @@
 				placeholder="Поиск"
 			/>
 		</div>
-
-		<div>
-			<div v-if="isLoading">Загрузка...</div>
-			<div
-				class="movie-list-container"
-				v-if="store.filteredMovies.length !== 0"
-			>
-				<div class="movie-list">
-					<NuxtLink
-						class="movie-item"
-						v-for="movie in store.filteredMovies"
-						:key="movie.id"
-						:to="`/movies/${movie.id}`"
-					>
-						<NuxtImg :src="movie.posterUrl" alt="Backdrop" />
-						<div class="movie-content">
-							<span class="rating">
-								<icon_starSvg />
-								{{ movie.tmdbRating.toFixed(1) }}</span
-							>
-							<span>{{ movie.releaseYear }}</span>
-							<span v-for="genre in movie.genres" :key="genre">{{
-								genre
-							}}</span>
-							<span>{{ movie.runtime }} min</span>
-						</div>
-						<h3>{{ movie.title }}</h3>
-					</NuxtLink>
-				</div>
-			</div>
-		</div>
+		<SearchMovieModal class="search-modal" />
 	</div>
 </template>
 <script setup lang="ts">
 import { useMovies } from '~/storage/movie'
 import searchSvg from '../assets/icons/search.svg?component'
-import icon_starSvg from '../assets/icons/icon_star.svg?component'
 
 const route = useRoute()
 const store = useMovies()
-const isLoading = ref(false)
 
 const onSearch = async () => {
 	// Если строка поиска очищена, сбрасываем страницу и очищаем результаты
@@ -68,7 +36,7 @@ watch(
 	}
 )
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 @use '../assets/scss/main';
 @use '../assets/scss/variables';
 
@@ -94,68 +62,6 @@ watch(
 		font-size: 18px;
 		line-height: 24px;
 		font-weight: 400;
-	}
-}
-
-.movie-list-container {
-	position: absolute;
-	top: 72px;
-	padding: 16px 16px 16px 16px;
-	width: 100%;
-	background-color: variables.$grey_color_3;
-	border-bottom-left-radius: 8px;
-	border-bottom-right-radius: 8px;
-
-	.movie-list {
-		display: flex;
-		flex-direction: column;
-		gap: 32px;
-
-		.movie-item {
-			position: relative;
-			display: flex;
-			flex-direction: column;
-			row-gap: 8px;
-			color: variables.$white_color;
-			padding-left: 56px;
-
-			img {
-				position: absolute;
-				left: 0;
-				width: 40px;
-				height: 52px;
-			}
-			.movie-content {
-				display: flex;
-				gap: 8px;
-				font-size: 14px;
-				line-height: 20px;
-				font-weight: 400;
-
-				.rating {
-					position: relative;
-					display: flex;
-					align-items: center;
-					column-gap: 4px;
-					background: variables.$green_color;
-					padding: 2px 8px 2px 22px;
-					border-radius: 16px;
-
-					svg {
-						width: 9.51px;
-						height: 9.05px;
-						position: absolute;
-						left: 8px;
-						top: 8px;
-					}
-				}
-			}
-			h3 {
-				font-size: 18px;
-				line-height: 24px;
-				font-weight: 700;
-			}
-		}
 	}
 }
 </style>

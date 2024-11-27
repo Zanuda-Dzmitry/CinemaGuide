@@ -2,13 +2,14 @@
 	<section class="movie container">
 		<div class="movie_left">
 			<div class="movie_left-top">
-				<span class="movie_rating">
-					<icon_star />
-					{{ rating.toFixed(1) }}</span
-				>
+				<ColorChanger
+					class="movie_rating"
+					:rating="rating"
+					customClass="star_svg"
+				/>
 				<span>{{ year }}</span>
 				<span v-for="genre in genres" :key="genre">{{ genre }}</span>
-				<span>{{ runtime }} min</span>
+				<span>{{ convertMinutesToHoursAndMinutes(runtime) }}</span>
 			</div>
 			<div class="movie_left-center">
 				<h2>{{ title }}</h2>
@@ -35,7 +36,6 @@
 	<VideoPlayer :videoId="videoId" :close="close" />
 </template>
 <script lang="ts" setup>
-import icon_star from '../assets/icons/icon_star.svg?component'
 import favoritesSvg from '../assets/icons/icon_favorite.svg?component'
 import updateSvg from '../assets/icons/update.svg?component'
 import { useAuthStore } from '~/storage/auth'
@@ -93,7 +93,7 @@ const close = () => {
 	videoId.value = ''
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 @use '../assets/scss/main';
 @use '../assets/scss/variables';
 @use '../assets/scss/mixin';
@@ -121,13 +121,13 @@ const close = () => {
 				display: flex;
 				align-items: center;
 				column-gap: 4px;
-				background: variables.$green_color;
 				padding: 4px 12px;
 				border-radius: 16px;
 
-				svg {
+				.star_svg {
 					width: 16px;
 					height: 16px;
+					position: none;
 				}
 			}
 		}

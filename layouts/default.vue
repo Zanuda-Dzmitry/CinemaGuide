@@ -10,6 +10,7 @@ import modalState from '~/utils/modalStore'
 		<main class="main container">
 			<slot />
 			<Modal v-if="modalState.isModalOpen" @close="modalState.toggleModal" />
+			<!-- <SearchMovieModal class="search-modal" /> -->
 		</main>
 		<Footer />
 	</div>
@@ -27,6 +28,7 @@ import modalState from '~/utils/modalStore'
 	backdrop-filter: blur(20px);
 	background: variables.$black_background;
 	position: relative;
+	z-index: 100;
 }
 
 .main {
