@@ -1,5 +1,11 @@
 @use './variables';
 
+@mixin btn_reset {
+	background: transparent;
+	border: none;
+	outline: none;
+}
+
 @mixin btn_hoverFocus_1 {
 	&:hover {
 		background: variables.$brand_color_focus;

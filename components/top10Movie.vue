@@ -1,5 +1,5 @@
 <template>
-	<div class="wrapper container">
+	<div class="wrapper">
 		<h2>Топ 10 фильмов</h2>
 		<div class="grid">
 			<NuxtLink
@@ -48,6 +48,7 @@ const movies = computed(() => data.value)
 	}
 	.grid {
 		display: grid;
+		justify-content: center;
 		grid-template-columns: repeat(auto-fill, 224px);
 		row-gap: 62px;
 		column-gap: 40px;
@@ -75,5 +76,8 @@ const movies = computed(() => data.value)
 			}
 		}
 	}
+}
+
+.tablet-container {
 }
 </style>

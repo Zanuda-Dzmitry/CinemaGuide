@@ -1,24 +1,36 @@
 export default defineNuxtConfig({
-	devtools: { enabled: true },
-	css: ['@/assets/scss/main.scss'],
+				devtools: { enabled: true },
+				css: ['@/assets/scss/main.scss'],
 
-	modules: [
-		'nuxt-svgo-loader',
-		'@pinia/nuxt',
-		'@nuxt/image',
-		'@vee-validate/nuxt',
-	],
+				modules: [
+				 'nuxt-svgo-loader',
+				 '@pinia/nuxt',
+				 '@nuxt/image',
+				 '@vee-validate/nuxt',
+				 'nuxt-viewport',
+				 'nuxt-swiper',
+				],
 
-	app: {
-		head: {
-			link: [
-				{
-					href: 'https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap',
-					rel: 'stylesheet',
+				viewport: {
+								breakpoints: {
+												mobile: 576,
+												tablet: 768,
+												tablet_landscape: 1024,
+												desktop: 1200,
+												// добавьте другие брейкпоинты по желанию
+								},
 				},
-			],
-		},
-	},
 
-	compatibilityDate: '2024-11-18',
+				app: {
+								head: {
+												link: [
+																{
+																				href: 'https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap',
+																				rel: 'stylesheet',
+																},
+												],
+								},
+				},
+
+				compatibilityDate: '2024-11-18',
 })

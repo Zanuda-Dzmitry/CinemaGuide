@@ -21,6 +21,8 @@
 		"nuxt": "^3.14.1592",
 		"nuxt-multi-video-player": "^1.1.6",
 		"nuxt-svgo-loader": "^0.4.1",
+		"nuxt-swiper": "^2.0.0",
+		"nuxt-viewport": "^2.2.0",
 		"pinia": "^2.2.2",
 		"vue": "^3.5.8",
 		"vue-router": "^4.4.5",

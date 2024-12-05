@@ -1,5 +1,5 @@
 <template>
-	<section class="movie container">
+	<section class="movie">
 		<div class="movie_left">
 			<div class="movie_left-top">
 				<ColorChanger
@@ -265,6 +265,7 @@ const close = () => {
 		img {
 			position: absolute;
 			top: -96px;
+			right: -80px;
 			width: 100%;
 			height: 100%;
 			object-fit: cover;
@@ -272,12 +273,24 @@ const close = () => {
 		&::after {
 			background: variables.$gradient_color;
 			content: '';
+			width: 100%;
 			height: 100%;
-			left: 0;
+			top: -96px;
+			right: -80px;
 			pointer-events: none;
 			position: absolute;
-			top: 0;
-			width: 100%;
+		}
+	}
+}
+
+.tablet_landscape,
+.tablet {
+	.movie_right {
+		img {
+			right: -20px;
+		}
+		&::after {
+			right: -20px;
 		}
 	}
 }

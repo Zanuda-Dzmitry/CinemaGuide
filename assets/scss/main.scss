@@ -40,8 +40,22 @@ body {
 	overflow-x: hidden;
 }
 
-.container {
-	max-width: 1440px;
-	margin: 0 auto;
-	padding: 0 80px;
+.desktop {
+	.header,
+	.main,
+	.footer {
+		max-width: 1440px;
+		margin: 0 auto;
+		padding: 0 80px;
+	}
+}
+
+.tablet_landscape,
+.tablet,
+.mobile {
+	.header,
+	.main,
+	.footer {
+		padding: 0 20px;
+	}
 }

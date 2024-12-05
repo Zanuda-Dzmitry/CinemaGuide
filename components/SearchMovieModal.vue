@@ -2,7 +2,37 @@
 	<div>
 		<div v-if="isLoading">Загрузка...</div>
 		<div class="movie-list-container" v-if="store.filteredMovies.length !== 0">
-			<div class="movie-list">
+			<!-- Используем Swiper для мобильной версии -->
+			<ClientOnly v-if="containerClass">
+				<swiper-container
+					class="movie-list"
+					ref="containerRef"
+					:slides-per-view="1.5"
+				>
+					<swiper-slide v-for="movie in store.filteredMovies" :key="movie.id">
+						<NuxtLink :to="`/movies/${movie.id}`" class="movie-item">
+							<NuxtImg :src="movie.posterUrl" alt="Backdrop" />
+							<div class="movie-content">
+								<ColorChanger
+									class="rating"
+									:rating="movie.tmdbRating"
+									customClass="star_svg"
+								/>
+								<span>{{ movie.releaseYear }}</span>
+								<span v-for="genre in movie.genres" :key="genre">{{
+									genre
+								}}</span>
+								<span
+									>{{ convertMinutesToHoursAndMinutes(movie.runtime) }}
+								</span>
+							</div>
+							<h3>{{ movie.title }}</h3>
+						</NuxtLink>
+					</swiper-slide>
+				</swiper-container>
+			</ClientOnly>
+			<!-- Используем обычный список для десктопной версии -->
+			<div class="movie-list" v-else>
 				<NuxtLink
 					class="movie-item"
 					v-for="movie in store.filteredMovies"
@@ -30,11 +60,17 @@
 <script lang="ts" setup>
 import { useMovies } from '~/storage/movie'
 
+const containerRef = ref(null)
 const store = useMovies()
 const isLoading = ref(false)
+const { $viewport } = useNuxtApp()
+
+const containerClass = computed(() => {
+	return $viewport.matches('tablet', 'mobile')
+})
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @use '../assets/scss/main';
 @use '../assets/scss/variables';
 
@@ -92,6 +128,29 @@ const isLoading = ref(false)
 				font-size: 18px;
 				line-height: 24px;
 				font-weight: 700;
+			}
+		}
+	}
+}
+
+.tablet,
+.mobile {
+	.movie-list-container {
+		border-radius: 8px;
+		padding: 0;
+		.movie-list {
+			.movie-item {
+				padding-left: 0;
+				width: 220px;
+				padding: 16px;
+				img {
+					position: relative;
+					width: 158px;
+					height: 206px;
+				}
+				.movie-content {
+					flex-wrap: wrap;
+				}
 			}
 		}
 	}

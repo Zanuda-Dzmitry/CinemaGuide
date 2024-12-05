@@ -5,6 +5,7 @@
 			:class="{ active: isPathActive('/profile') }"
 			@click="user ? router.push('/profile') : modalState.toggleModal()"
 		>
+			<profileSvg />
 			{{ user ? user.name : 'Вход' }}
 		</button>
 	</div>
@@ -14,6 +15,7 @@
 import { useAuthStore } from '@/storage/auth'
 import { useRouter } from 'vue-router'
 import modalState from '~/utils/modalStore'
+import profileSvg from '../assets/icons/profile.svg?component'
 
 const router = useRouter()
 const route = useRoute()
@@ -48,6 +50,28 @@ onMounted(handleProfile)
 	line-height: 32px;
 	font-weight: 400;
 	padding-bottom: 8px;
+
+	svg {
+		display: none;
+	}
+}
+
+.tablet_landscape,
+.tablet,
+.mobile {
+	.auth-button {
+		font-size: 0;
+		line-height: 0;
+		display: flex;
+		padding: 0;
+		svg {
+			display: block;
+			fill: variables.$white_color;
+		}
+	}
+	.active {
+		border: none;
+	}
 }
 
 .auth-title {

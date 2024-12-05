@@ -1,20 +1,26 @@
-<script setup lang="ts">
-import modalState from '~/utils/modalStore'
-</script>
-
 <template>
-	<div>
-		<div class="header container">
+	<div :class="containerClass">
+		<header class="header">
 			<MainMenu />
-		</div>
-		<main class="main container">
+		</header>
+		<main class="main">
 			<slot />
 			<Modal v-if="modalState.isModalOpen" @close="modalState.toggleModal" />
-			<!-- <SearchMovieModal class="search-modal" /> -->
 		</main>
-		<Footer />
+		<Footer class="footer" />
 	</div>
 </template>
+
+<script setup lang="ts">
+import modalState from '~/utils/modalStore'
+
+const { $viewport } = useNuxtApp()
+
+const containerClass = computed(() => {
+	// Возвращаем соответствующий класс на основе текущего брейкпоинта
+	return $viewport.breakpoint.value
+})
+</script>
 
 <style lang="scss" scoped>
 @use '../assets/scss/main';
@@ -22,6 +28,7 @@ import modalState from '~/utils/modalStore'
 
 .header {
 	display: flex;
+	column-gap: 20px;
 	justify-content: space-between;
 	align-items: center;
 	height: 96px;
@@ -29,6 +36,13 @@ import modalState from '~/utils/modalStore'
 	background: variables.$black_background;
 	position: relative;
 	z-index: 100;
+}
+
+.tablet,
+.mobile {
+	.header {
+		height: 88px;
+	}
 }
 
 .main {
