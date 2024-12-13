@@ -1,8 +1,13 @@
 <template>
-	<div class="wrapper container">
-		<h2>Top 10 Movie</h2>
+	<div class="wrapper">
+		<h2>Топ 10 фильмов</h2>
 		<div class="grid">
-			<NuxtLink class="card" v-for="(movie, index) in movies" :key="index">
+			<NuxtLink
+				class="card"
+				:to="`/movies/${movie.id}`"
+				v-for="(movie, index) in movies"
+				:key="index"
+			>
 				<span>{{ index + 1 }}</span>
 				<img class="movie_poster" :src="movie.posterUrl" alt="Poster" />
 			</NuxtLink>
@@ -14,6 +19,7 @@
 import { useMovieTop10 } from '~/storage/movieTop10'
 
 interface Movie {
+	id: number
 	posterUrl: string
 }
 
@@ -27,17 +33,22 @@ const movies = computed(() => data.value)
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/scss/main.scss';
+@use '../assets/scss/main';
+@use '../assets/scss/variables';
 
 .wrapper {
 	padding-top: 40px;
 
 	h2 {
-		color: $white_color;
+		color: variables.$white_color;
 		margin-bottom: 64px;
+		font-size: 40px;
+		line-height: 48px;
+		font-weight: 700;
 	}
 	.grid {
 		display: grid;
+		justify-content: center;
 		grid-template-columns: repeat(auto-fill, 224px);
 		row-gap: 62px;
 		column-gap: 40px;
@@ -51,9 +62,9 @@ const movies = computed(() => data.value)
 				top: -10px;
 				left: -10px;
 				display: block;
-				color: $brand-color;
+				color: variables.$brand-color;
 				font-size: 24px;
-				background-color: $white_color;
+				background-color: variables.$white_color;
 				padding: 8px 24px 8px 24px;
 				border-radius: 50px;
 			}
@@ -65,5 +76,8 @@ const movies = computed(() => data.value)
 			}
 		}
 	}
+}
+
+.tablet-container {
 }
 </style>

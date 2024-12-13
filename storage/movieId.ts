@@ -1,51 +1,46 @@
-import type { Movie } from '../server/types'
+import type { MovieType } from '../services/types/types'
+import { URL_MOVIE } from '~/constants'
+import axios from 'axios'
 
-export const useMovieId = defineStore('movie', () => {
-	const movieTitle = ref('')
-	const moviePlot = ref('')
-	const movieRating = ref(0)
-	const movieYear = ref(0)
-	const movieGenre = ref([])
-	const movieRuntime = ref(0)
-	const moviePoster = ref('')
-	const movieBudget = ref('')
-	const movieLanguage = ref('')
-	const movieRevenue = ref('')
-	const movieDirector = ref('')
-	const movieProduction = ref('')
-	const movieAwardsSummary = ref('')
+export const useMovieId = defineStore('movie', {
+	state: () => ({
+		movieId: 0,
+		movieTitle: '',
+		moviePlot: '',
+		movieRating: 0,
+		movieYear: 0,
+		movieGenre: [],
+		movieRuntime: 0,
+		moviePoster: '',
+		movieBackdrop: '',
+		movieBudget: '',
+		movieLanguage: '',
+		movieRevenue: '',
+		movieDirector: '',
+		movieProduction: '',
+		movieAwardsSummary: '',
+		movieTrailerYouTubeId: '',
+	}),
 
-	return {
-		movieTitle,
-		moviePlot,
-		movieRating,
-		movieYear,
-		movieGenre,
-		movieRuntime,
-		moviePoster,
-		movieBudget,
-		movieLanguage,
-		movieRevenue,
-		movieDirector,
-		movieProduction,
-		movieAwardsSummary,
-
-		fetchMovieId: async (genreId: string) => {
-			const response = await $fetch<Movie>(`/api/movie/${genreId}`)
-
-			movieTitle.value = response.title
-			moviePlot.value = response.plot
-			movieRating.value = response.tmdbRating
-			movieYear.value = response.releaseYear
-			movieGenre.value = response.genres
-			movieRuntime.value = response.runtime
-			moviePoster.value = response.posterUrl
-			movieBudget.value = response.budget
-			movieLanguage.value = response.language
-			movieRevenue.value = response.revenue
-			movieDirector.value = response.director
-			movieProduction.value = response.production
-			movieAwardsSummary.value = response.awardsSummary
+	actions: {
+		async fetchMovieId(genreId: string) {
+			const response = await axios.get<MovieType>(`${URL_MOVIE}/${genreId}`)
+			this.movieId = response.data.id
+			this.movieTitle = response.data.title
+			this.moviePlot = response.data.plot
+			this.movieRating = response.data.tmdbRating
+			this.movieYear = response.data.releaseYear
+			this.movieGenre = response.data.genres
+			this.movieRuntime = response.data.runtime
+			this.moviePoster = response.data.posterUrl
+			this.movieBackdrop = response.data.backdropUrl
+			this.movieBudget = response.data.budget
+			this.movieLanguage = response.data.language
+			this.movieRevenue = response.data.revenue
+			this.movieDirector = response.data.director
+			this.movieProduction = response.data.production
+			this.movieAwardsSummary = response.data.awardsSummary
+			this.movieTrailerYouTubeId = response.data.trailerYouTubeId
 		},
-	}
+	},
 })

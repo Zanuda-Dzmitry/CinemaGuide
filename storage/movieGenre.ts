@@ -1,10 +1,14 @@
-export const useMovieGenre = defineStore('movieGenre', () => {
-	const movieGenre = ref([])
+import axios from 'axios'
+import { URL_MOVIE_GENRES } from '~/constants'
 
-	return {
-		movieGenre,
-		fetchMovieGenre: async () => {
-			movieGenre.value = await $fetch('/api/movieGenres')
+export const useMovieGenre = defineStore('movieGenre', {
+	state: () => ({
+		movieGenre: [],
+	}),
+	actions: {
+		async fetchMovieGenre() {
+			const response = await axios.get(URL_MOVIE_GENRES)
+			this.movieGenre = response.data
 		},
-	}
+	},
 })

@@ -1,97 +1,46 @@
 <template>
-	<div class="movie container">
-		<div class="movie_left">
-			<div class="movie_top">
-				<span>{{ rating }}</span>
-				<span>{{ year }}</span>
-				<span v-for="genre in genres" :key="genre">{{ genre }}</span>
-				<span>{{ runtime }} min</span>
-			</div>
-			<div class="movie_center">
-				<h1>{{ title }}</h1>
-				<p>{{ plot }}</p>
-			</div>
-			<div class="movie_bottom">
-				<button>треилер</button>
-				<button>о фильме</button>
-				<button>добавить в избранное</button>
-				<button>обновить</button>
-			</div>
-		</div>
-		<div class="movie_right">
-			<img v-if="data" class="movie_poster" :src="poster" alt="Poster" />
-		</div>
+	<div v-if="isLoading">Загрузка...</div>
+	<div v-else>
+		<Movie
+			:id="id"
+			:title="title"
+			:plot="plot"
+			:rating="rating"
+			:year="year"
+			:genres="genres"
+			:runtime="runtime"
+			:backdrop="backdrop"
+			:youTubeId="youTubeId"
+		/>
 	</div>
 </template>
 
 <script lang="ts" setup>
+import Movie from './Movie.vue'
 import { useMovieRandom } from '../storage/movieRandom'
 
+const isLoading = ref(true)
 const store = useMovieRandom()
 
-const { data } = useAsyncData('movieRandom', async () => {
-	await Promise.all([store.fetchMovieRandom()])
-	return {
-		movieTitle: store.movieTitle,
-		moviePlot: store.moviePlot,
-		movieRating: store.movieRating,
-		movieYear: store.movieYear,
-		movieGenre: store.movieGenre,
-		movieRuntime: store.movieRuntime,
-		moviePoster: store.moviePoster,
-	}
-})
+async function fetchData() {
+	await store.fetchMovieRandom()
+	isLoading.value = false
+}
 
-const title = computed(() => data.value?.movieTitle)
-const plot = computed(() => data.value?.moviePlot)
-const rating = computed(() => data.value?.movieRating)
-const year = computed(() => data.value?.movieYear)
-const genres = computed(() => data.value?.movieGenre)
-const runtime = computed(() => data.value?.movieRuntime)
-const poster = computed(() => data.value?.moviePoster)
+fetchData()
+
+const title = computed(() => store.movieTitle || '')
+const plot = computed(() => store.moviePlot || '')
+const rating = computed(() => store.movieRating || 0)
+const year = computed(() => store.movieYear || 0)
+const genres = computed(() => store.movieGenre || [])
+const runtime = computed(() => store.movieRuntime || 0)
+const backdrop = computed(() => store.movieBackdrop || '')
+const id = computed(() => store.movieId || 0)
+const youTubeId = computed(() => store.movieTrailerYouTubeId || '')
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/scss/main.scss';
-.movie {
-	position: relative;
-	height: 680px;
-	display: flex;
-
-	.movie_left {
-		width: 100%;
-		height: 100%;
-
-		.movie_top {
-			color: $white_color;
-		}
-
-		.movie_center {
-			h1 {
-				color: $white_color;
-			}
-
-			p {
-				color: $white_color;
-			}
-		}
-	}
-
-	.movie_right {
-		position: absolute;
-		right: 0;
-		top: 0;
-		width: 900px;
-		height: 100%;
-
-		.movie_poster {
-			position: absolute;
-			// top: -96px;
-			z-index: -1;
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
-		}
-	}
-}
+@use '../assets/scss/main';
+@use '../assets/scss/variables';
 </style>

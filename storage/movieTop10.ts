@@ -1,10 +1,14 @@
-export const useMovieTop10 = defineStore('movieTop10', () => {
-	const movieTop10 = ref([])
+import axios from 'axios'
+import { URL_MOVIE_TOP10 } from '~/constants'
 
-	return {
-		movieTop10,
-		fetchMovieTop10: async () => {
-			movieTop10.value = await $fetch('/api/movieTop10')
+export const useMovieTop10 = defineStore('movieTop10', {
+	state: () => ({
+		movieTop10: [],
+	}),
+	actions: {
+		async fetchMovieTop10() {
+			const response = await axios.get(URL_MOVIE_TOP10)
+			this.movieTop10 = response.data
 		},
-	}
+	},
 })

@@ -1,6 +1,32 @@
 $white_color: #fff;
 $black_color: #000;
-$grey_color: #BDBDBD;
-$blue_color: #00BCD4;
-$red_color: #F44336;
-$brand-color: #6A5DC2;
+$black_color_2: #0a0b0be6;
+$grey_color: rgba(255, 255, 255, 0.7);
+$grey_color_2: rgba(255, 255, 255, 0.5);
+$grey_color_3: #383a3c;
+$grey_color_4: rgba(255, 255, 255, 0.25);
+$grey_color_5: rgba(255, 255, 255, 0.33);
+$grey_color_hover: #747474;
+$blue_color: #00bcd4;
+$red_color: #f44336;
+$red_color_2: #c82020;
+$brand_color: #6a5dc2;
+$brand_color_2: #b3a8ff;
+$brand_color_hover: #d6d2f1;
+$brand_color_focus: #8577e1;
+$green_color: #308e21;
+$pink_color: rgb(220, 93, 252);
+$yellow_color: #a59400;
+
+$black_background: rgba(0, 0, 0, 0.5);
+$grey_background: #333333;
+$black_background_2: rgba(0, 0, 0, 0.4);
+
+$gradient_color: linear-gradient(
+	90deg,
+	#000,
+	rgba(0, 0, 0, 0.5) 20.41%,
+	transparent
+);
+
+$font: 'Play', sans-serif, cursive;

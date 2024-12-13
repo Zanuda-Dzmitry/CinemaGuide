@@ -1,39 +1,87 @@
-<script setup lang="ts">
-import CinemaGuideSvg from '../assets/icons/CinemaGuide.svg?component'
-import AuthButton from './AuthButton.vue'
-
-const items = [
-	{ to: '/', name: 'Главная' },
-	{ to: '/genres', name: 'Жанры' },
-]
-</script>
-
 <template>
-	<div>
+	<div class="logo">
 		<NuxtLink to="/">
-			<CinemaGuideSvg class="logo" />
+			<logoSvg />
 		</NuxtLink>
 	</div>
-	<div>
-		<NuxtLink class="nav-link" v-for="item in items" :to="item.to">{{
-			item.name
-		}}</NuxtLink>
+	<div class="nav">
+		<NuxtLink class="nav_link" to="/">Главная</NuxtLink>
+		<NuxtLink class="nav_link" to="/genres"> <genresSvg /> Жанры</NuxtLink>
 	</div>
-	<div>
-		<AuthButton />
-	</div>
+	<SearchMovie />
+	<AuthButton />
 </template>
 
-<style scoped>
+<script setup lang="ts">
+import logoSvg from '../assets/icons/CinemaGuide.svg?component'
+import genresSvg from '../assets/icons/icon_genres.svg?component'
+import AuthButton from './AuthButton.vue'
+const route = useRoute()
+
+const isPathActive = (path: string) => {
+	return route.path === path
+}
+onMounted(isPathActive)
+</script>
+
+<style lang="scss" scoped>
+@use '../assets/scss/main';
+@use '../assets/scss/variables';
+
 .logo {
-	width: 240px;
-	height: 32px;
+	a {
+		border: none !important;
+		svg {
+			width: 240px;
+			height: 32px;
+		}
+	}
 }
 
-.nav-link {
-	text-decoration: none;
-	padding: 10px 15px;
-	font-size: 24px;
-	color: #fff;
+.nav {
+	display: flex;
+	column-gap: 40px;
+	.nav_link {
+		text-decoration: none;
+		font-size: 24px;
+		color: variables.$white_color;
+		padding-bottom: 8px;
+		svg {
+			display: none;
+		}
+	}
+}
+
+.router-link-active {
+	border-bottom: 1.5px solid variables.$pink_color;
+}
+
+.tablet_landscape,
+.tablet,
+.mobile {
+	.nav {
+		.nav_link {
+			font-size: 0;
+			padding-bottom: 0;
+
+			svg {
+				display: block;
+			}
+		}
+		.router-link-active {
+			border: none;
+		}
+	}
+}
+
+.tablet,
+.mobile {
+	.logo {
+		flex: 1;
+		svg {
+			width: 136px;
+			height: 18px;
+		}
+	}
 }
 </style>

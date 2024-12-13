@@ -1,78 +1,125 @@
-interface User {
-	email: string
-	name: string
-	surname: string
-}
+import axios from 'axios'
+import type { User } from '~/services/types/types'
+import {
+	URL_LOGIN,
+	URL_REGISTER,
+	URL_PROFILE,
+	URL_LOGOUT,
+	URL_FAVORITES,
+} from '~/constants'
 
 export const useAuthStore = defineStore('auth', {
 	state: () => ({
 		user: null as User | null,
-		token: null as boolean | null,
 	}),
 
 	actions: {
 		async login(email: string, password: string) {
 			try {
-				const response: Response = await $fetch('/api/login', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
+				await axios.post(
+					URL_LOGIN,
+					{
+						email: email,
+						password: password,
 					},
-					body: JSON.stringify({
-						email,
-						password,
-					}),
-				})
+					{
+						headers: {
+							'Content-Type': 'application/json',
+						},
 
-				// Проверка результата
-				response ? (this.token = true) : (this.token = false)
-
-				// Сохранение токена в Local Storage
-				localStorage.setItem('token', this.token ? 'true' : 'false')
+						withCredentials: true, // Включаем cookies в запрос
+					}
+				)
+				await this.profile()
 			} catch (error) {
 				console.error('Ошибка авторизации:', error)
 				throw error
 			}
 		},
 
-		// async register(
-		// 	email: string,
-		// 	password: string,
-		// 	name: string,
-		// 	surname: string
-		// ) {
-		// 	try {
-		// 		const response: {
-		// 			error: string
-		// 			result: boolean
-		// 			message: string
-		// 		} = await $fetch('/api/register', {
-		// 			method: 'POST',
-		// 			body: {
-		// 				email,
-		// 				password,
-		// 				name,
-		// 				surname,
-		// 			},
-		// 		})
+		async register(
+			email: string,
+			password: string,
+			name: string,
+			surname: string
+		) {
+			try {
+				const response: {
+					error: string
+					success: boolean
+					message: string
+				} = await axios.post(
+					URL_REGISTER,
+					{
+						email: email,
+						password: password,
+						name: name,
+						surname: surname,
+					},
+					{
+						headers: {
+							'Content-Type': 'application/json',
+						},
 
-		// 		// Проверка результата регистрации
-		// 		if (response.result) {
-		// 			this.user = { email, name, surname } // Присваиваем пользователя
-		// 		} else {
-		// 			// Если есть ошибка в ответе
-		// 			throw new Error(response.error || 'Неизвестная ошибка.')
-		// 		}
-		// 	} catch (error) {
-		// 		console.error('Ошибка регистрации:', error)
-		// 		throw error
-		// 	}
-		// },
+						withCredentials: true, // Включаем cookies в запрос
+					}
+				)
+			} catch (error) {
+				console.error('Ошибка регистрации:', error)
+				throw error
+			}
+		},
 
-		logout() {
+		async profile() {
+			const response = await axios.get(URL_PROFILE, {
+				withCredentials: true, // Включаем cookies
+			})
+			this.user = response.data
+
+			return this.user
+		},
+
+		async addFavorites(id: string) {
+			try {
+				await axios.post(
+					URL_FAVORITES,
+					{
+						id: id,
+					},
+					{
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						withCredentials: true, // Включаем cookies в запрос
+					}
+				)
+				this.user?.favorites.push(id) // Обновляем локальный массив favorites
+			} catch (error) {
+				console.error('Ошибка добавления в избранное:', error)
+				throw error
+			}
+		},
+		async removeFavorites(id: string) {
+			try {
+				await axios.delete(`${URL_FAVORITES}/${id}`, {
+					withCredentials: true,
+				})
+				if (this.user) {
+					this.user.favorites = this.user.favorites.filter(
+						favoriteId => favoriteId !== id
+					) // Обновляем локальный массив favorites
+				}
+			} catch (error) {
+				console.error('Ошибка при удалении из избранного:', error)
+				throw error
+			}
+		},
+
+		async logout() {
 			this.user = null
-			this.token = null
-			localStorage.removeItem('token')
+			await axios.get(URL_LOGOUT, {
+				withCredentials: true, // Включаем cookies
+			})
 		},
 	},
 })
