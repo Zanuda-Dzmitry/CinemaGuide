@@ -33,6 +33,7 @@ button {
 
 body {
 	max-width: 1440px;
+	min-width: 375px;
 	background: rgba(0, 0, 0, 1);
 	font-family: variables.$font;
 	margin: 0 auto;
@@ -41,21 +42,16 @@ body {
 }
 
 .desktop {
-	.header,
-	.main,
-	.footer {
-		max-width: 1440px;
-		margin: 0 auto;
+	.container {
 		padding: 0 80px;
 	}
 }
 
 .tablet_landscape,
 .tablet,
-.mobile {
-	.header,
-	.main,
-	.footer {
+.mobile,
+.mobile_small {
+	.container {
 		padding: 0 20px;
 	}
 }

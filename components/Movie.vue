@@ -1,38 +1,49 @@
 <template>
-	<section class="movie">
-		<div class="movie_left">
-			<div class="movie_left-top">
-				<ColorChanger
-					class="movie_rating"
-					:rating="rating"
-					customClass="star_svg"
-				/>
-				<span>{{ year }}</span>
-				<span v-for="genre in genres" :key="genre">{{ genre }}</span>
-				<span>{{ convertMinutesToHoursAndMinutes(runtime) }}</span>
+	<div class="container">
+		<section class="movie">
+			<div class="movie_backdrop">
+				<NuxtImg :src="backdrop" alt="Backdrop" />
 			</div>
-			<div class="movie_left-center">
-				<h2>{{ title }}</h2>
-				<p>{{ plot }}</p>
-			</div>
-			<div class="movie_left-bottom">
-				<button @click="openVideoPlayer" class="movie_trailer">Треилер</button>
-				<NuxtLink v-if="isHomePage" :to="`/movies/${id}`"> О фильме</NuxtLink>
-				<button class="favorite_btn" @click="toggleFavorites(id.toString())">
-					<favoritesSvg
-						class="favorite"
-						:class="{ favoriteFill: isFavorite }"
+			<div class="movie_content">
+				<div class="movie_content-top">
+					<ColorChanger
+						class="movie_rating"
+						:rating="rating"
+						customClass="star_svg"
 					/>
-				</button>
-				<button v-if="isHomePage" class="update_btn" @click="refreshMovie">
-					<updateSvg class="update_svg" />
-				</button>
+					<span>{{ year }}</span>
+					<span v-for="genre in genres" :key="genre">{{ genre }}</span>
+					<span>{{ convertMinutesToHoursAndMinutes(runtime) }}</span>
+				</div>
+				<div class="movie_content-center">
+					<h2>{{ title }}</h2>
+					<p>{{ plot }}</p>
+				</div>
+				<div class="movie_content-bottom">
+					<button @click="openVideoPlayer" class="movie_trailer">
+						Треилер
+					</button>
+					<div class="movie_line">
+						<NuxtLink v-if="isHomePage" :to="`/movies/${id}`">
+							О фильме</NuxtLink
+						>
+						<button
+							class="favorite_btn"
+							@click="toggleFavorites(id.toString())"
+						>
+							<favoritesSvg
+								class="favorite"
+								:class="{ favoriteFill: isFavorite }"
+							/>
+						</button>
+						<button v-if="isHomePage" class="update_btn" @click="refreshMovie">
+							<updateSvg class="update_svg" />
+						</button>
+					</div>
+				</div>
 			</div>
-		</div>
-		<div class="movie_right">
-			<NuxtImg :src="backdrop" alt="Backdrop" />
-		</div>
-	</section>
+		</section>
+	</div>
 	<VideoPlayer :videoId="videoId" :close="close" />
 </template>
 <script lang="ts" setup>
@@ -100,21 +111,18 @@ const close = () => {
 
 .movie {
 	position: relative;
-	padding-bottom: 122px;
-	min-height: 624px;
-	.movie_left {
-		padding-top: 106px;
-		width: 600px;
+	padding-top: clamp(1.5rem, -0.305rem + 7.7vw, 6.625rem);
+	padding-bottom: clamp(1.5rem, -0.657rem + 9.202vw, 7.625rem);
+	.movie_content {
+		max-width: 600px;
 
-		.movie_left-top {
+		.movie_content-top {
 			display: flex;
 			align-items: center;
 			column-gap: 16px;
-			padding-bottom: 16px;
+			padding-bottom: clamp(0.8rem, 0.73rem + 0.3vw, 1rem);
 			span {
-				font-size: 18px;
-				line-height: 24px;
-				font-weight: 700;
+				@include mixin.span_text;
 				color: variables.$grey_color;
 			}
 			.movie_rating {
@@ -132,31 +140,29 @@ const close = () => {
 			}
 		}
 
-		.movie_left-center {
-			padding-bottom: 60px;
+		.movie_content-center {
+			padding-bottom: clamp(2rem, 1.384rem + 2.629vw, 3.75rem);
 
 			h2 {
 				color: variables.$white_color;
-				padding-bottom: 16px;
-				font-size: 48px;
-				line-height: 56px;
-				font-weight: 700;
+				padding-bottom: clamp(0.8rem, 0.73rem + 0.3vw, 1rem);
+				@include mixin.title;
 			}
 
 			p {
 				color: variables.$grey_color;
-				font-size: 24px;
-				line-height: 32px;
-				font-weight: 400;
+				@include mixin.text;
 			}
 		}
 
-		.movie_left-bottom {
-			display: flex;
+		.movie_content-bottom {
 			align-items: center;
-			column-gap: 16px;
+			gap: 16px;
+			display: flex;
+			flex-wrap: wrap;
 
 			.movie_trailer {
+				// grid-area: btn_1;
 				background: variables.$brand_color;
 				border-radius: 28px;
 				border: 0;
@@ -168,115 +174,116 @@ const close = () => {
 
 				@include mixin.btn_hoverFocus_1;
 			}
-			a {
-				background: #333333;
-				border-radius: 28px;
-				border: 0;
-				padding: 16px 48px;
-				font-size: 18px;
-				font-weight: 700;
-				line-height: 24px;
-				color: variables.$white_color;
 
-				&:hover {
-					background: variables.$grey_color_hover;
-					color: variables.$grey_color_2;
-					transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
-				}
-				&:focus {
-					background: variables.$white_color;
-					color: variables.$black_color;
-					transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
-				}
-			}
+			.movie_line {
+				display: flex;
+				column-gap: 16px;
+				a {
+					background: variables.$grey_background;
+					border-radius: 28px;
+					border: 0;
+					// padding: 16px 48px;
+					padding: 16px clamp(2rem, 1.648rem + 1.502vw, 3rem);
+					font-size: 18px;
+					font-weight: 700;
+					line-height: 24px;
+					color: variables.$white_color;
 
-			.update_btn,
-			.favorite_btn {
-				background: variables.$grey_background;
-				border-radius: 28px;
-				border: 0;
-				padding: 15px 24px;
-
-				svg {
-					width: 24px;
-					height: 24px;
+					&:hover {
+						background: variables.$grey_color_hover;
+						color: variables.$grey_color_2;
+						transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+					}
+					&:focus {
+						background: variables.$white_color;
+						color: variables.$black_color;
+						transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+					}
 				}
 
-				.favorite {
-					fill: transparent;
-					stroke: variables.$white_color;
-				}
-				.favoriteFill {
-					fill: variables.$brand_color_2;
-					stroke: variables.$brand_color_2;
-				}
-				.update_svg {
-					fill: variables.$white_color;
-				}
-			}
+				.update_btn,
+				.favorite_btn {
+					background: variables.$grey_background;
+					border-radius: 28px;
+					border: 0;
+					padding: 15px clamp(1.125rem, 1.037rem + 0.376vw, 1.375rem);
 
-			.favorite_btn {
-				&:hover {
-					background: variables.$grey_color_hover;
-					transition: background 0.3s ease-in-out, stroke 0.3s ease-in-out;
+					svg {
+						width: 24px;
+						height: 24px;
+					}
 
 					.favorite {
-						stroke: variables.$grey_color_2;
+						fill: transparent;
+						stroke: variables.$white_color;
 					}
-				}
-				&:focus {
-					background: variables.$white_color;
-					transition: background 0.3s ease-in-out, stroke 0.3s ease-in-out;
-
-					.favorite {
-						stroke: variables.$black_color;
+					.favoriteFill {
+						fill: variables.$brand_color_2;
+						stroke: variables.$brand_color_2;
 					}
-				}
-			}
-			.update_btn {
-				&:hover {
-					background: variables.$grey_color_hover;
-					transition: background 0.3s ease-in-out, fill 0.3s ease-in-out;
-
 					.update_svg {
-						fill: variables.$grey_color_2;
+						fill: variables.$white_color;
 					}
 				}
-				&:focus {
-					background: variables.$white_color;
-					transition: background 0.3s ease-in-out, fill 0.3s ease-in-out;
 
-					.update_svg {
-						fill: variables.$black_color;
+				.favorite_btn {
+					&:hover {
+						background: variables.$grey_color_hover;
+						transition: background 0.3s ease-in-out, stroke 0.3s ease-in-out;
+
+						.favorite {
+							stroke: variables.$grey_color_2;
+						}
+					}
+					&:focus {
+						background: variables.$white_color;
+						transition: background 0.3s ease-in-out, stroke 0.3s ease-in-out;
+
+						.favorite {
+							stroke: variables.$black_color;
+						}
+					}
+				}
+				.update_btn {
+					&:hover {
+						background: variables.$grey_color_hover;
+						transition: background 0.3s ease-in-out, fill 0.3s ease-in-out;
+
+						.update_svg {
+							fill: variables.$grey_color_2;
+						}
+					}
+					&:focus {
+						background: variables.$white_color;
+						transition: background 0.3s ease-in-out, fill 0.3s ease-in-out;
+
+						.update_svg {
+							fill: variables.$black_color;
+						}
 					}
 				}
 			}
 		}
 	}
 
-	.movie_right {
-		height: 680px;
-		z-index: -1;
+	.movie_backdrop {
 		position: absolute;
-		right: 0;
-		top: 0;
-		width: 900px;
+		top: -96px;
+		right: -80px;
+		width: 100%;
+		height: 100%;
+		z-index: -1;
 
 		img {
 			position: absolute;
-			top: -96px;
-			right: -80px;
-			width: 100%;
-			height: 100%;
 			object-fit: cover;
+			height: 100%;
 		}
 		&::after {
 			background: variables.$gradient_color;
 			content: '';
 			width: 100%;
 			height: 100%;
-			top: -96px;
-			right: -80px;
 			pointer-events: none;
 			position: absolute;
 		}
@@ -284,13 +291,54 @@ const close = () => {
 }
 
 .tablet_landscape,
-.tablet {
-	.movie_right {
-		img {
+.tablet,
+.mobile {
+	.movie {
+		.movie_backdrop {
 			right: -20px;
 		}
-		&::after {
-			right: -20px;
+	}
+}
+
+.tablet,
+.mobile,
+.mobile_small {
+	.movie {
+		.movie_backdrop {
+			top: 0;
+			right: 20px;
+
+			&::after {
+				background: variables.$gradient_color_2;
+			}
+		}
+	}
+}
+
+.mobile_small {
+	.movie {
+		padding-top: 0;
+		.movie_backdrop {
+			position: relative;
+
+			img {
+				position: sticky;
+			}
+			&::after {
+				left: 0;
+			}
+		}
+		.movie_content {
+			padding-top: 24px;
+			.movie_left-bottom {
+			}
+			.movie_trailer {
+				width: 100%;
+			}
+			.movie_line {
+				justify-content: space-between;
+				width: 100%;
+			}
 		}
 	}
 }

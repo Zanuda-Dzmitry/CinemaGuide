@@ -58,7 +58,8 @@ onMounted(handleProfile)
 
 .tablet_landscape,
 .tablet,
-.mobile {
+.mobile,
+.mobile_small {
 	.auth-button {
 		font-size: 0;
 		line-height: 0;

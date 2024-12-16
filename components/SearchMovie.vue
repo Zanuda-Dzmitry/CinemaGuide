@@ -150,7 +150,8 @@ onBeforeUnmount(() => {
 }
 
 .tablet,
-.mobile {
+.mobile,
+.mobile_small {
 	.search-movie {
 		flex: 0;
 		background: transparent;

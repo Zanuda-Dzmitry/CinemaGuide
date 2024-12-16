@@ -1,22 +1,72 @@
 <template>
-	<div class="wrapper">
-		<h2>Топ 10 фильмов</h2>
-		<div class="grid">
-			<NuxtLink
-				class="card"
-				:to="`/movies/${movie.id}`"
-				v-for="(movie, index) in movies"
-				:key="index"
-			>
-				<span>{{ index + 1 }}</span>
-				<img class="movie_poster" :src="movie.posterUrl" alt="Poster" />
-			</NuxtLink>
+	<div class="container">
+		<div class="wrapper">
+			<h2>Топ 10 фильмов</h2>
+			<!-- Используем Swiper для мобильной версии -->
+			<ClientOnly v-if="containerClass">
+				<swiper-container
+					class="grid"
+					ref="containerRef"
+					:loop="true"
+					:slides-per-view="slidesPerView"
+				>
+					<swiper-slide
+						v-for="(movie, index) in movies"
+						:key="index"
+						class="movie_slide"
+					>
+						<NuxtLink class="card" :to="`/movies/${movie.id}`">
+							<span class="slide_index">{{ index + 1 }}</span>
+							<img class="movie_poster" :src="movie.posterUrl" alt="Poster" />
+						</NuxtLink>
+					</swiper-slide>
+				</swiper-container>
+			</ClientOnly>
+			<!-- Используем обычный список для десктопной версии -->
+			<div v-else class="grid">
+				<NuxtLink
+					class="card"
+					:to="`/movies/${movie.id}`"
+					v-for="(movie, index) in movies"
+					:key="index"
+				>
+					<span>{{ index + 1 }}</span>
+					<img class="movie_poster" :src="movie.posterUrl" alt="Poster" />
+				</NuxtLink>
+			</div>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
 import { useMovieTop10 } from '~/storage/movieTop10'
+
+const containerRef = ref(null)
+const { $viewport } = useNuxtApp()
+
+const containerClass = computed(() => {
+	return $viewport.matches('mobile_small')
+})
+
+// Количество отображаемых слайдов на экране, включая десятичные значения
+const slidesPerView = ref(0)
+
+// Функция для обновления slidesPerView
+const updateSlidesPerView = () => {
+	const screenWidth = window.innerWidth
+	const slideWidth = 224 + 20 // Добавляем padding по 20 пикселей с каждой стороны
+
+	slidesPerView.value = screenWidth / slideWidth
+}
+
+onMounted(() => {
+	updateSlidesPerView()
+	window.addEventListener('resize', updateSlidesPerView)
+})
+
+onBeforeUnmount(() => {
+	window.removeEventListener('resize', updateSlidesPerView)
+})
 
 interface Movie {
 	id: number
@@ -35,18 +85,19 @@ const movies = computed(() => data.value)
 <style lang="scss" scoped>
 @use '../assets/scss/main';
 @use '../assets/scss/variables';
+@use '../assets/scss/mixin';
 
 .wrapper {
-	padding-top: 40px;
+	padding-top: clamp(2rem, 1.824rem + 0.751vw, 2.5rem);
+	padding-bottom: clamp(2rem, 0.063rem + 8.263vw, 7.5rem);
 
 	h2 {
 		color: variables.$white_color;
-		margin-bottom: 64px;
-		font-size: 40px;
-		line-height: 48px;
-		font-weight: 700;
+		@include mixin.title_2;
 	}
+
 	.grid {
+		padding-top: clamp(2.5rem, 1.972rem + 2.254vw, 4rem);
 		display: grid;
 		justify-content: center;
 		grid-template-columns: repeat(auto-fill, 224px);
@@ -60,12 +111,12 @@ const movies = computed(() => data.value)
 			span {
 				position: absolute;
 				top: -10px;
-				left: -10px;
+				left: -14px;
 				display: block;
 				color: variables.$brand-color;
 				font-size: 24px;
 				background-color: variables.$white_color;
-				padding: 8px 24px 8px 24px;
+				padding: 8px 22px 8px 22px;
 				border-radius: 50px;
 			}
 
@@ -78,6 +129,29 @@ const movies = computed(() => data.value)
 	}
 }
 
-.tablet-container {
+.mobile_small {
+	.container {
+		padding: 0 !important;
+
+		.wrapper {
+			h2 {
+				padding-left: 20px;
+			}
+			.grid {
+				display: flex;
+
+				.card {
+					display: flex;
+					width: 224px;
+					padding: 20px; // отступ внутри карточки
+
+					span {
+						top: 10px;
+						left: 5px;
+					}
+				}
+			}
+		}
+	}
 }
 </style>

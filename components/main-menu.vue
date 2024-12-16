@@ -58,7 +58,8 @@ onMounted(isPathActive)
 
 .tablet_landscape,
 .tablet,
-.mobile {
+.mobile,
+.mobile_small {
 	.nav {
 		.nav_link {
 			font-size: 0;
@@ -75,7 +76,8 @@ onMounted(isPathActive)
 }
 
 .tablet,
-.mobile {
+.mobile,
+.mobile_small {
 	.logo {
 		flex: 1;
 		svg {

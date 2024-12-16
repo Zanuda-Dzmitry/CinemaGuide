@@ -8,13 +8,11 @@ definePageMeta({
 </script>
 
 <template>
-	<div class="home">
-		<Cover />
-		<Top10Movie />
-	</div>
+	<Cover />
+	<Top10Movie />
 </template>
 
-<style scoped>
-.home {
-}
+<style lang="scss" scoped>
+@use '../assets/scss/main';
+@use '../assets/scss/variables';
 </style>
