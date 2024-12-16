@@ -1,19 +1,18 @@
 <template>
 	<div :class="containerClass">
-		<header class="header">
+		<header class="header container">
 			<MainMenu />
 		</header>
 		<main class="main">
 			<slot />
 			<Modal v-if="modalState.isModalOpen" @close="modalState.toggleModal" />
 		</main>
-		<Footer class="footer" />
+		<Footer class="footer container" />
 	</div>
 </template>
 
 <script setup lang="ts">
 import modalState from '~/utils/modalStore'
-
 const { $viewport } = useNuxtApp()
 
 const containerClass = computed(() => {
@@ -38,15 +37,15 @@ const containerClass = computed(() => {
 	z-index: 100;
 }
 
-.tablet,
-.mobile {
-	.header {
-		height: 88px;
-	}
+.main {
+	position: relative;
 }
 
-.main {
-	padding-bottom: 120px;
-	position: relative;
+.tablet,
+.mobile,
+.mobile_small {
+	.header {
+		height: 56px;
+	}
 }
 </style>

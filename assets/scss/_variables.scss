@@ -29,4 +29,11 @@ $gradient_color: linear-gradient(
 	transparent
 );
 
+$gradient_color_2: linear-gradient(
+	-90deg,
+	#000,
+	rgba(0, 0, 0, 0.5) 20.41%,
+	transparent
+);
+
 $font: 'Play', sans-serif, cursive;
