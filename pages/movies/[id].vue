@@ -11,37 +11,39 @@
 		:youTubeId="youTubeId || ''"
 	/>
 
-	<section class="movie_about container">
-		<div class="movie_info">
-			<h2>О фильме</h2>
-			<ul>
-				<li>
-					<span class="movie_info-title"> Язык оригинала </span>
-					<span class="movie_info-value">{{ language }}</span>
-				</li>
-				<li>
-					<span class="movie_info-title"> Бюджет </span>
-					<span class="movie_info-value">{{ budget }}</span>
-				</li>
-				<li>
-					<span class="movie_info-title"> Выручка </span>
-					<span class="movie_info-value">{{ revenue }}</span>
-				</li>
-				<li>
-					<span class="movie_info-title"> Режиссёр </span>
-					<span class="movie_info-value">{{ director }}</span>
-				</li>
-				<li>
-					<span class="movie_info-title"> Продакшен </span>
-					<span class="movie_info-value">{{ production }}</span>
-				</li>
-				<li>
-					<span class="movie_info-title"> Награды </span>
-					<span class="movie_info-value">{{ awardsSummary }}</span>
-				</li>
-			</ul>
-		</div>
-	</section>
+	<div class="container">
+		<section class="movie_about">
+			<div class="movie_info">
+				<h2>О фильме</h2>
+				<ul>
+					<li>
+						<span class="movie_info-title"> Язык оригинала </span>
+						<span class="movie_info-value">{{ language }}</span>
+					</li>
+					<li>
+						<span class="movie_info-title"> Бюджет </span>
+						<span class="movie_info-value">{{ budget }}</span>
+					</li>
+					<li>
+						<span class="movie_info-title"> Выручка </span>
+						<span class="movie_info-value">{{ revenue }}</span>
+					</li>
+					<li>
+						<span class="movie_info-title"> Режиссёр </span>
+						<span class="movie_info-value">{{ director }}</span>
+					</li>
+					<li>
+						<span class="movie_info-title"> Продакшен </span>
+						<span class="movie_info-value">{{ production }}</span>
+					</li>
+					<li>
+						<span class="movie_info-title"> Награды </span>
+						<span class="movie_info-value">{{ awardsSummary }}</span>
+					</li>
+				</ul>
+			</div>
+		</section>
+	</div>
 </template>
 
 <script lang="ts" setup>
@@ -99,40 +101,58 @@ useHead({
 <style lang="scss" scoped>
 @use '../assets/scss/main';
 @use '../assets/scss/variables';
+@use '../assets/scss/mixin';
 
 .movie_about {
-	.movie_info {
-		h2 {
-			font-size: 40px;
-			line-height: 48px;
-			font-weight: 700;
-			color: variables.$white_color;
-			padding-bottom: 64px;
-		}
+	padding-top: clamp(2rem, 1.824rem + 0.751vw, 2.5rem);
+	padding-bottom: clamp(2rem, 0.063rem + 8.263vw, 7.5rem);
+	h2 {
+		@include mixin.title_2;
+		color: variables.$white_color;
+		padding-bottom: clamp(2.5rem, 1.972rem + 2.254vw, 4rem);
+	}
 
-		ul {
-			display: flex;
-			flex-direction: column;
-			row-gap: 24px;
-		}
-		li {
-			display: flex;
+	ul {
+		display: flex;
+		flex-direction: column;
+		row-gap: clamp(0.75rem, 0.486rem + 1.127vw, 1.5rem);
+	}
+	li {
+		display: flex;
+		column-gap: 8px;
+		color: variables.$white_color;
+
+		.movie_info-title {
+			@include mixin.span_text;
+			display: inline-flex;
 			column-gap: 8px;
+			white-space: nowrap;
+			max-width: 320px;
+			width: 100%;
+			align-items: baseline;
 
-			color: variables.$grey_color;
-
-			.movie_info-title {
-				display: inline-flex;
-				column-gap: 8px;
-				white-space: nowrap;
-				max-width: 320px;
+			&::after {
+				content: '';
 				width: 100%;
-				align-items: baseline;
+				border-bottom: 1px dashed variables.$grey_color;
+			}
+		}
+	}
+}
 
-				&::after {
-					content: '';
-					width: 100%;
-					border-bottom: 1px dashed variables.$grey_color;
+.mobile_small {
+	.movie_about {
+		ul {
+			li {
+				flex-direction: column;
+				row-gap: 4px;
+
+				.movie_info-title {
+					color: variables.$grey_color;
+
+					&::after {
+						content: none;
+					}
 				}
 			}
 		}

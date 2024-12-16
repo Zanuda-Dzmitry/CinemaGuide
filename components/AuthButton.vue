@@ -2,7 +2,7 @@
 	<div>
 		<button
 			class="auth-button"
-			:class="{ active: isPathActive('/profile') }"
+			:class="{ active_border: isPathActive('/profile') }"
 			@click="user ? router.push('/profile') : modalState.toggleModal()"
 		>
 			<profileSvg />
@@ -56,6 +56,13 @@ onMounted(handleProfile)
 	}
 }
 
+.auth-title {
+	margin-bottom: 24px;
+}
+.active_border {
+	border-bottom: 1.5px solid variables.$pink_color;
+}
+
 .tablet_landscape,
 .tablet,
 .mobile,
@@ -70,15 +77,8 @@ onMounted(handleProfile)
 			fill: variables.$white_color;
 		}
 	}
-	.active {
+	.active_border {
 		border: none;
 	}
-}
-
-.auth-title {
-	margin-bottom: 24px;
-}
-.active {
-	border-bottom: 1.5px solid variables.$pink_color;
 }
 </style>
