@@ -19,7 +19,10 @@
 					<h2>{{ title }}</h2>
 					<p>{{ plot }}</p>
 				</div>
-				<div class="movie_content-bottom">
+				<div
+					class="movie_content-bottom"
+					:class="{ 'page-movie': !isHomePage, 'page-cover': isHomePage }"
+				>
 					<button @click="openVideoPlayer" class="movie_trailer">
 						Треилер
 					</button>
@@ -118,6 +121,7 @@ const close = () => {
 
 		.movie_content-top {
 			display: flex;
+			flex-wrap: wrap;
 			align-items: center;
 			column-gap: 16px;
 			padding-bottom: clamp(0.8rem, 0.73rem + 0.3vw, 1rem);
@@ -182,7 +186,6 @@ const close = () => {
 					background: variables.$grey_background;
 					border-radius: 28px;
 					border: 0;
-					// padding: 16px 48px;
 					padding: 16px clamp(2rem, 1.648rem + 1.502vw, 3rem);
 					font-size: 18px;
 					font-weight: 700;
@@ -330,14 +333,21 @@ const close = () => {
 		}
 		.movie_content {
 			padding-top: 24px;
-			.movie_left-bottom {
+
+			.page-movie {
+				.movie_trailer {
+					flex: 1;
+				}
 			}
-			.movie_trailer {
-				width: 100%;
-			}
-			.movie_line {
-				justify-content: space-between;
-				width: 100%;
+
+			.page-cover {
+				.movie_trailer {
+					width: 100%;
+				}
+				.movie_line {
+					justify-content: space-between;
+					width: 100%;
+				}
 			}
 		}
 	}

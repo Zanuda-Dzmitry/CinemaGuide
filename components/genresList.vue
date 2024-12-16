@@ -1,20 +1,22 @@
 <template>
-	<section class="genre">
-		<h2 class="genre_title">Жанры фильмов</h2>
-		<div class="genre_wrapper">
-			<NuxtLink
-				class="genre_link"
-				v-for="(genre, index) in genres"
-				:key="index"
-				:to="`/genres/${genre}`"
-			>
-				<div class="genre_content">
-					<h3 class="genre_content-title">{{ genre }}</h3>
-				</div>
-				<NuxtImg :src="getPoster(`${genre}`)" />
-			</NuxtLink>
-		</div>
-	</section>
+	<div class="container">
+		<section class="genre">
+			<h2 class="genre_title">Жанры фильмов</h2>
+			<div class="genre_wrapper">
+				<NuxtLink
+					class="genre_link"
+					v-for="(genre, index) in genres"
+					:key="index"
+					:to="`/genres/${genre}`"
+				>
+					<div class="genre_content">
+						<h3 class="genre_content-title">{{ genre }}</h3>
+					</div>
+					<NuxtImg :src="getPoster(`${genre}`)" />
+				</NuxtLink>
+			</div>
+		</section>
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -35,27 +37,28 @@ const getPoster = (poster: string | number) => genrePosters[poster] ?? ''
 <style lang="scss" scoped>
 @use '../assets/scss/main';
 @use '../assets/scss/variables';
+@use '../assets/scss/mixin';
 
 .genre {
-	padding-top: 64px;
+	padding-top: clamp(1.5rem, 0.136rem + 5.822vw, 5.375rem);
+	padding-bottom: clamp(2.5rem, -0.141rem + 11.268vw, 10rem);
 
 	.genre_title {
-		font-size: 48px;
-		line-height: 56px;
-		font-weight: 700;
+		@include mixin.title;
 		color: variables.$white_color;
-		padding-bottom: 64px;
+		padding-bottom: clamp(2.5rem, 1.972rem + 2.254vw, 4rem);
 	}
 
 	.genre_wrapper {
 		display: grid;
+		justify-content: center;
 		grid-template-columns: repeat(auto-fill, 290px);
-		gap: 64px 40px;
+		gap: clamp(1.5rem, 0.62rem + 3.756vw, 4rem)
+			clamp(1.5rem, 1.148rem + 1.502vw, 2.5rem);
 
 		.genre_link {
 			position: relative;
 			height: 304px;
-			border: 1px solid rgba(255, 255, 255, 0.25);
 			box-shadow: 0px 0px 80px 0px rgba(255, 255, 255, 0.33);
 			border-radius: 24px;
 			background-color: variables.$white_color;
@@ -86,6 +89,14 @@ const getPoster = (poster: string | number) => genrePosters[poster] ?? ''
 				height: 100%;
 				object-fit: cover;
 			}
+		}
+	}
+}
+
+.mobile_small {
+	.genre {
+		.genre_wrapper {
+			grid-template-columns: repeat(auto-fill, 335px);
 		}
 	}
 }

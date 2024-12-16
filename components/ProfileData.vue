@@ -92,9 +92,9 @@ const handleLogout = async () => {
 
 .movie_list {
 	display: grid;
+	justify-content: center;
 	grid-template-columns: repeat(auto-fill, 224px);
-	row-gap: 32px;
-	column-gap: 24px;
+	gap: 32px 40px;
 
 	.movie_link {
 		display: block;
