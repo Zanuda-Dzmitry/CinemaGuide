@@ -251,9 +251,9 @@ const onSubmit: SubmissionHandler<
 		flex-direction: column;
 		align-items: center;
 		background: variables.$white_color;
-		padding: 64px 40px;
+		padding: 64px clamp(1.25rem, 0.81rem + 1.878vw, 2.5rem);
 		border-radius: 24px;
-		width: 420px;
+		width: clamp(20.938rem, 19.067rem + 7.981vw, 26.25rem);
 
 		.logo {
 			width: 180px;
@@ -274,6 +274,11 @@ const onSubmit: SubmissionHandler<
 			background: variables.$white_color;
 			border: none;
 			border-radius: 24px;
+
+			svg {
+				width: 24px;
+				height: 24px;
+			}
 		}
 		.auth-form {
 			display: grid;
@@ -405,6 +410,14 @@ const onSubmit: SubmissionHandler<
 				line-height: 24px;
 				border: none;
 			}
+		}
+	}
+}
+
+.mobile_small {
+	.modal-content {
+		.close-button {
+			right: 0;
 		}
 	}
 }
