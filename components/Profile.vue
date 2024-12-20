@@ -1,6 +1,6 @@
 <template>
-	<div class="container">
-		<div class="profile">
+	<div class="profile">
+		<div class="container">
 			<h2>Мой аккаунт</h2>
 			<div class="nav">
 				<button
@@ -24,10 +24,15 @@
 					<span v-if="!isFirstWordVisible">аккаунта</span>
 				</button>
 			</div>
-			<div class="content">
-				<slot v-if="currentSlot === 'favorites'" name="favorites"></slot>
-				<slot v-if="currentSlot === 'settings'" name="settings"></slot>
-			</div>
+		</div>
+	</div>
+	<div class="profile_content">
+		<div
+			class="container"
+			:class="{ container_active: currentSlot === 'favorites' }"
+		>
+			<slot v-if="currentSlot === 'favorites'" name="favorites"></slot>
+			<slot v-if="currentSlot === 'settings'" name="settings"></slot>
 		</div>
 	</div>
 </template>
@@ -56,7 +61,8 @@ const currentSlot = ref('favorites') // По умолчанию показыва
 
 .profile {
 	padding-top: clamp(1.5rem, 0.62rem + 3.756vw, 4rem);
-	padding-bottom: clamp(4.25rem, 2.225rem + 8.638vw, 10rem);
+	padding-bottom: clamp(2.5rem, 1.972rem + 2.254vw, 4rem);
+
 	h2 {
 		@include mixin.title;
 		color: variables.$white_color;
@@ -65,8 +71,7 @@ const currentSlot = ref('favorites') // По умолчанию показыва
 
 	.nav {
 		display: flex;
-		column-gap: 68px;
-		padding-bottom: clamp(2.5rem, 1.972rem + 2.254vw, 4rem);
+		column-gap: clamp(1.5rem, 0.532rem + 4.131vw, 4.25rem);
 
 		.nav-link {
 			display: flex;
@@ -88,6 +93,18 @@ const currentSlot = ref('favorites') // По умолчанию показыва
 			&.active_border {
 				border-bottom: 1.5px solid variables.$pink_color;
 			}
+		}
+	}
+}
+
+.profile_content {
+	padding-bottom: clamp(4.25rem, 2.225rem + 8.638vw, 10rem);
+}
+
+.mobile_small {
+	.profile_content {
+		.container_active {
+			padding: 0;
 		}
 	}
 }

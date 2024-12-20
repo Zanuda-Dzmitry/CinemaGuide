@@ -54,7 +54,7 @@ const slidesPerView = ref(0)
 // Функция для обновления slidesPerView
 const updateSlidesPerView = () => {
 	const screenWidth = window.innerWidth
-	const slideWidth = 224 + 20 // Добавляем padding по 20 пикселей с каждой стороны
+	const slideWidth = 224
 
 	slidesPerView.value = screenWidth / slideWidth
 }

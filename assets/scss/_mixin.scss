@@ -23,6 +23,11 @@
 	fill: variables.$brand_color_2;
 }
 
+@mixin card_hoverFocus {
+	outline: 1px solid variables.$white_color;
+	transition: outline 0.3s ease-in-out;
+}
+
 // Font size
 @mixin title {
 	font-size: clamp(1.5rem, 4vw, 3rem);
