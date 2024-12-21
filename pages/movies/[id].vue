@@ -9,9 +9,10 @@
 		:runtime="runtime"
 		:backdrop="backdrop"
 		:youTubeId="youTubeId || ''"
+		v-if="data"
 	/>
 
-	<div class="container">
+	<div class="container" v-if="data">
 		<section class="movie_about">
 			<div class="movie_info">
 				<h2>О фильме</h2>
