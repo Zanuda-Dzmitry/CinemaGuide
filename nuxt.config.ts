@@ -31,7 +31,7 @@ export default defineNuxtConfig({
 				},
 			],
 		},
-		baseURL: 'https://github.com/Zanuda-Dzmitry/CinemaGuide',
+		baseURL: '/CinemaGuide/',
 	},
 
 	compatibilityDate: '2024-11-18',
