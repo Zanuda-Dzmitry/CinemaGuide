@@ -47,7 +47,7 @@
 			</div>
 		</section>
 	</div>
-	<VideoPlayer :videoId="videoId" :close="close" />
+	<VideoPlayer :videoId="videoId" :title="title" :close="close" />
 </template>
 <script lang="ts" setup>
 import favoritesSvg from '../assets/icons/icon_favorite.svg?component'

@@ -348,6 +348,7 @@ const onSubmit: SubmissionHandler<
 					font-weight: 700;
 					line-height: 24px;
 					border: none;
+					background-color: transparent;
 				}
 
 				.auth-button-login {
