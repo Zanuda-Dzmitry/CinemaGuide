@@ -34,5 +34,11 @@ export default defineNuxtConfig({
 		baseURL: '/CinemaGuide/',
 	},
 
+	nitro: {
+		output: {
+			dir: './dist/CinemaGuide',
+		},
+	},
+
 	compatibilityDate: '2024-11-18',
 })
