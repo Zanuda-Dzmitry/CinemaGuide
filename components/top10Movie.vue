@@ -140,14 +140,17 @@ const movies = computed(() => data.value)
 			.grid {
 				display: flex;
 
-				.card {
-					display: flex;
+				.movie_slide {
 					width: 224px;
-					padding: 20px; // отступ внутри карточки
+					.card {
+						display: flex;
+						width: 100%;
+						padding: 20px; // отступ внутри карточки
 
-					span {
-						top: 10px;
-						left: 5px;
+						span {
+							top: 10px;
+							left: 5px;
+						}
 					}
 				}
 			}
