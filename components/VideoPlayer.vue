@@ -21,8 +21,6 @@ const props = defineProps<{
 	title: string // Заголовок видео на YouTube
 	close: () => void
 }>()
-
-console.log(props.title)
 </script>
 
 <style lang="scss" scoped>
