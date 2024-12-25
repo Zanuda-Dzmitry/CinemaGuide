@@ -60,8 +60,12 @@ const updateSlidesPerView = () => {
 }
 
 onMounted(() => {
+	console.log('перед', slidesPerView.value)
 	updateSlidesPerView()
+	console.log('после', slidesPerView.value)
+
 	window.addEventListener('resize', updateSlidesPerView)
+	console.log('финиш', slidesPerView.value)
 })
 
 onBeforeUnmount(() => {
