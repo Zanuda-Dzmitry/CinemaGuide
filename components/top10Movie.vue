@@ -55,7 +55,7 @@ const slidesPerView = ref(0)
 const updateSlidesPerView = () => {
 	const screenWidth = window.innerWidth
 	const slideWidth = 224
-
+	console.log(screenWidth)
 	slidesPerView.value = screenWidth / slideWidth
 }
 
