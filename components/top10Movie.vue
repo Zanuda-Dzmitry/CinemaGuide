@@ -40,6 +40,7 @@
 
 <script setup lang="ts">
 import { useMovieTop10 } from '~/storage/movieTop10'
+// import { useClientOnly } from '#app'
 
 const containerRef = ref(null)
 const { $viewport } = useNuxtApp()
@@ -53,20 +54,18 @@ const slidesPerView = ref(0)
 
 // Функция для обновления slidesPerView
 const updateSlidesPerView = () => {
-	const screenWidth = window.innerWidth
-	const slideWidth = 224
-	console.log(screenWidth)
-	slidesPerView.value = screenWidth / slideWidth
+	useClientOnly(() => {
+		const screenWidth = window.innerWidth
+		const slideWidth = 224
+		console.log(screenWidth)
+		slidesPerView.value = screenWidth / slideWidth
+	})
 }
 
 onMounted(() => {
-	window.addEventListener('load', () => {
-		updateSlidesPerView()
-	})
-	console.log('после', slidesPerView.value)
+	updateSlidesPerView()
 
 	window.addEventListener('resize', updateSlidesPerView)
-	console.log('финиш', slidesPerView.value)
 })
 
 onBeforeUnmount(() => {
