@@ -60,8 +60,9 @@ const updateSlidesPerView = () => {
 }
 
 onMounted(() => {
-	console.log('перед', slidesPerView.value)
-	updateSlidesPerView()
+	window.addEventListener('load', () => {
+		updateSlidesPerView()
+	})
 	console.log('после', slidesPerView.value)
 
 	window.addEventListener('resize', updateSlidesPerView)
