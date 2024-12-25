@@ -40,25 +40,24 @@
 
 <script setup lang="ts">
 import { useMovieTop10 } from '~/storage/movieTop10'
+import { useWindowSize } from '@vueuse/core'
 
 const containerRef = ref(null)
 const { $viewport } = useNuxtApp()
+const { width } = useWindowSize()
 
 const containerClass = computed(() => {
 	return $viewport.matches('mobile_small')
 })
 
 // Количество отображаемых слайдов на экране, включая десятичные значения
-const slidesPerView = ref(0)
+const slidesPerView = ref(1)
 
 // Функция для обновления slidesPerView
 const updateSlidesPerView = () => {
-	if (process.client) {
-		const screenWidth = window.innerWidth
-		const slideWidth = 224
-		console.log(screenWidth)
-		slidesPerView.value = screenWidth / slideWidth
-	}
+	const slideWidth = 224
+	console.log(width.value)
+	slidesPerView.value = width.value / slideWidth
 }
 
 onMounted(() => {
