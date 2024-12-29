@@ -7,12 +7,15 @@
 					class="movie_list"
 					ref="containerRef"
 					:loop="true"
-					:slides-per-view="slidesPerView"
+					:slides-per-view="'auto'"
+					:space-between="40"
+					:slides-offset-before="20"
 				>
 					<swiper-slide
 						class="movie_item"
 						v-for="movie in movies"
 						:key="movie.id"
+						style="width: 224px"
 					>
 						<NuxtLink class="movie_link" :to="`/movies/${movie.id}`">
 							<img :src="movie.poster" alt="Movie Poster" />
@@ -81,26 +84,6 @@ const { $viewport } = useNuxtApp()
 
 const containerClass = computed(() => {
 	return $viewport.matches('mobile_small')
-})
-
-// Количество отображаемых слайдов на экране, включая десятичные значения
-const slidesPerView = ref(0)
-
-// Функция для обновления slidesPerView
-const updateSlidesPerView = () => {
-	const screenWidth = window.innerWidth
-	const slideWidth = 224 + 40 // Добавляем padding по 20 пикселей с каждой стороны
-
-	slidesPerView.value = screenWidth / slideWidth
-}
-
-onMounted(() => {
-	updateSlidesPerView()
-	window.addEventListener('resize', updateSlidesPerView)
-})
-
-onBeforeUnmount(() => {
-	window.removeEventListener('resize', updateSlidesPerView)
 })
 
 onMounted(async () => {
@@ -293,8 +276,6 @@ p {
 			display: flex;
 
 			.movie_item {
-				padding: 20px; // отступ внутри карточки
-
 				a {
 					display: flex;
 					width: 100%;
