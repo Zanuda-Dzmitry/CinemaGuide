@@ -66,7 +66,7 @@ const isLoading = ref(false)
 const { $viewport } = useNuxtApp()
 
 const containerClass = computed(() => {
-	return $viewport.matches('tablet', 'mobile', 'mobile_small')
+	return $viewport.matches('mobile_small')
 })
 </script>
 
@@ -133,8 +133,6 @@ const containerClass = computed(() => {
 	}
 }
 
-.tablet,
-.mobile,
 .mobile_small {
 	.movie-list-container {
 		border-radius: 8px;
