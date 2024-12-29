@@ -1,23 +1,26 @@
 <template>
-	<div :class="containerClass">
-		<header class="header container">
-			<MainMenu />
-		</header>
-		<main class="main">
-			<slot />
-			<Modal v-if="modalState.isModalOpen" @close="modalState.toggleModal" />
-		</main>
-		<Footer class="footer container" />
-	</div>
+	<client-only>
+		<div :class="containerClass">
+			<header class="header container">
+				<MainMenu />
+			</header>
+			<main class="main">
+				<slot />
+				<Modal v-if="modalState.isModalOpen" @close="modalState.toggleModal" />
+			</main>
+			<Footer class="footer container" />
+		</div>
+	</client-only>
 </template>
 
 <script setup lang="ts">
 import modalState from '~/utils/modalStore'
 const { $viewport } = useNuxtApp()
 
-const containerClass = computed(() => {
-	// Возвращаем соответствующий класс на основе текущего брейкпоинта
-	return $viewport.breakpoint.value
+const containerClass = ref('')
+
+onMounted(() => {
+	containerClass.value = $viewport.breakpoint.value
 })
 </script>
 

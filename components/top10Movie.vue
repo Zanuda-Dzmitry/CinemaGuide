@@ -8,7 +8,7 @@
 					class="grid"
 					ref="containerRef"
 					:loop="true"
-					:slides-per-view="updateSlidesPerView"
+					:slides-per-view="slidesPerView"
 				>
 					<swiper-slide
 						v-for="(movie, index) in movies"
@@ -52,24 +52,24 @@ const containerClass = computed(() => {
 })
 
 // Количество отображаемых слайдов на экране, включая десятичные значения
-const slidesPerView = ref(1)
+const slidesPerView = ref(0)
 
 // Функция для обновления slidesPerView
-const updateSlidesPerView = computed(() => {
+const updateSlidesPerView = () => {
 	const slideWidth = 224
-	// console.log(width.value)
-	return (slidesPerView.value = width.value / slideWidth)
+	console.log(width.value)
+	slidesPerView.value = width.value / slideWidth
+}
+
+onMounted(() => {
+	updateSlidesPerView()
+
+	window.addEventListener('resize', updateSlidesPerView)
 })
 
-// onMounted(() => {
-// 	// updateSlidesPerView()
-
-// 	window.addEventListener('resize', updateSlidesPerView)
-// })
-
-// onBeforeUnmount(() => {
-// 	window.removeEventListener('resize', updateSlidesPerView)
-// })
+onBeforeUnmount(() => {
+	window.removeEventListener('resize', updateSlidesPerView)
+})
 
 interface Movie {
 	id: number
@@ -144,7 +144,7 @@ const movies = computed(() => data.value)
 				display: flex;
 
 				.movie_slide {
-					width: 224px !important;
+					width: 224px;
 					.card {
 						display: flex;
 						width: 100%;
