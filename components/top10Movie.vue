@@ -9,6 +9,7 @@
 					class="grid"
 					ref="containerRef"
 					:loop="true"
+					:slides-per-view="slidesPerView"
 					:space-between="40"
 					:slides-offset-before="20"
 				>
@@ -45,7 +46,6 @@ import { useMovieTop10 } from '~/storage/movieTop10'
 import { useWindowSize } from '@vueuse/core'
 
 const containerRef = ref(null)
-// const containerClass = ref(false)
 const { $viewport } = useNuxtApp()
 const { width } = useWindowSize()
 
@@ -54,23 +54,23 @@ const containerClass = computed(() => {
 })
 
 // Количество отображаемых слайдов на экране, включая десятичные значения
-// const slidesPerView = ref(0)
+const slidesPerView = ref(0)
 
-// // Функция для обновления slidesPerView
-// const updateSlidesPerView = () => {
-// 	const slideWidth = 224
-// 	console.log(width.value)
-// 	slidesPerView.value = width.value / slideWidth
-// }
+// Функция для обновления slidesPerView
+const updateSlidesPerView = () => {
+	const slideWidth = 224
+	console.log(width.value)
+	slidesPerView.value = width.value / slideWidth
+}
 
-// onMounted(() => {
-// 	updateSlidesPerView()
-// 	window.addEventListener('resize', updateSlidesPerView)
-// })
+onMounted(() => {
+	updateSlidesPerView()
+	window.addEventListener('resize', updateSlidesPerView)
+})
 
-// onBeforeUnmount(() => {
-// 	window.removeEventListener('resize', updateSlidesPerView)
-// })
+onBeforeUnmount(() => {
+	window.removeEventListener('resize', updateSlidesPerView)
+})
 
 interface Movie {
 	id: number
