@@ -8,7 +8,7 @@
 					class="grid"
 					ref="containerRef"
 					:loop="true"
-					:slides-per-view="slidesPerView"
+					:slides-per-view="updateSlidesPerView"
 				>
 					<swiper-slide
 						v-for="(movie, index) in movies"
@@ -43,6 +43,7 @@ import { useMovieTop10 } from '~/storage/movieTop10'
 import { useWindowSize } from '@vueuse/core'
 
 const containerRef = ref(null)
+// const containerClass = ref(false)
 const { $viewport } = useNuxtApp()
 const { width } = useWindowSize()
 
@@ -54,21 +55,21 @@ const containerClass = computed(() => {
 const slidesPerView = ref(1)
 
 // Функция для обновления slidesPerView
-const updateSlidesPerView = () => {
+const updateSlidesPerView = computed(() => {
 	const slideWidth = 224
-	console.log(width.value)
-	slidesPerView.value = width.value / slideWidth
-}
-
-onMounted(() => {
-	updateSlidesPerView()
-
-	window.addEventListener('resize', updateSlidesPerView)
+	// console.log(width.value)
+	return (slidesPerView.value = width.value / slideWidth)
 })
 
-onBeforeUnmount(() => {
-	window.removeEventListener('resize', updateSlidesPerView)
-})
+// onMounted(() => {
+// 	// updateSlidesPerView()
+
+// 	window.addEventListener('resize', updateSlidesPerView)
+// })
+
+// onBeforeUnmount(() => {
+// 	window.removeEventListener('resize', updateSlidesPerView)
+// })
 
 interface Movie {
 	id: number
