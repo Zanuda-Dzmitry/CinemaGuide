@@ -17,10 +17,9 @@
 import modalState from '~/utils/modalStore'
 const { $viewport } = useNuxtApp()
 
-const containerClass = ref('')
-
-onMounted(() => {
-	containerClass.value = $viewport.breakpoint.value
+const containerClass = computed(() => {
+	// Возвращаем соответствующий класс на основе текущего брейкпоинта
+	return $viewport.breakpoint.value
 })
 </script>
 
