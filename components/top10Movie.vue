@@ -9,7 +9,7 @@
 					class="grid"
 					ref="containerRef"
 					:loop="true"
-					:slides-per-view="slidesPerView"
+					:slides-per-view="'auto'"
 					:space-between="40"
 					:slides-offset-before="20"
 				>
@@ -17,6 +17,7 @@
 						v-for="(movie, index) in movies"
 						:key="index"
 						class="movie_slide"
+						style="width: 224px"
 					>
 						<NuxtLink class="card" :to="`/movies/${movie.id}`">
 							<span class="slide_index">{{ index + 1 }}</span>
@@ -43,33 +44,12 @@
 
 <script setup lang="ts">
 import { useMovieTop10 } from '~/storage/movieTop10'
-import { useWindowSize } from '@vueuse/core'
 
 const containerRef = ref(null)
 const { $viewport } = useNuxtApp()
-const { width } = useWindowSize()
 
 const containerClass = computed(() => {
 	return $viewport.matches('mobile_small')
-})
-
-// Количество отображаемых слайдов на экране, включая десятичные значения
-const slidesPerView = ref(0)
-
-// Функция для обновления slidesPerView
-const updateSlidesPerView = () => {
-	const slideWidth = 224
-	console.log(width.value)
-	slidesPerView.value = width.value / slideWidth
-}
-
-onMounted(() => {
-	updateSlidesPerView()
-	window.addEventListener('resize', updateSlidesPerView)
-})
-
-onBeforeUnmount(() => {
-	window.removeEventListener('resize', updateSlidesPerView)
 })
 
 interface Movie {
@@ -145,7 +125,6 @@ const movies = computed(() => data.value)
 				display: flex;
 
 				.movie_slide {
-					width: 224px !important;
 					.card {
 						display: flex;
 						width: 100%;
