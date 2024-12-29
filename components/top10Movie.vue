@@ -3,8 +3,9 @@
 		<div class="wrapper">
 			<h2>Топ 10 фильмов</h2>
 			<!-- Используем Swiper для мобильной версии -->
-			<ClientOnly v-if="containerClass">
+			<client-only>
 				<swiper-container
+					v-if="containerClass"
 					class="grid"
 					ref="containerRef"
 					:loop="true"
@@ -21,19 +22,19 @@
 						</NuxtLink>
 					</swiper-slide>
 				</swiper-container>
-			</ClientOnly>
-			<!-- Используем обычный список для десктопной версии -->
-			<div v-else class="grid">
-				<NuxtLink
-					class="card"
-					:to="`/movies/${movie.id}`"
-					v-for="(movie, index) in movies"
-					:key="index"
-				>
-					<span>{{ index + 1 }}</span>
-					<img class="movie_poster" :src="movie.posterUrl" alt="Poster" />
-				</NuxtLink>
-			</div>
+				<!-- Используем обычный список для десктопной версии -->
+				<div v-else class="grid">
+					<NuxtLink
+						class="card"
+						:to="`/movies/${movie.id}`"
+						v-for="(movie, index) in movies"
+						:key="index"
+					>
+						<span>{{ index + 1 }}</span>
+						<img class="movie_poster" :src="movie.posterUrl" alt="Poster" />
+					</NuxtLink>
+				</div>
+			</client-only>
 		</div>
 	</div>
 </template>
