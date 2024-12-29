@@ -177,7 +177,7 @@ onBeforeUnmount(() => {
 		position: absolute;
 		right: 20px;
 		flex: 1;
-		width: 335px;
+		width: clamp(20.938rem, 16.008rem + 21.033vw, 34.938rem);
 		background: variables.$grey_color_3;
 		padding: 12px 16px;
 		column-gap: 12px;

@@ -1,20 +1,10 @@
 import { BASE_URL } from '~/constants'
 import axios from 'axios'
-
-interface Movie {
-	posterUrl: string | undefined
-	id: number
-	title: string
-	director: string
-	genres: string[]
-	tmdbRating: number
-	releaseYear: number
-	runtime: number
-}
+import type { MovieType } from '~/services/types/types'
 
 export const useMovies = defineStore('movies', {
 	state: () => ({
-		movies: [] as Movie[],
+		movies: [] as MovieType[],
 		hasMoreMovies: false,
 		error: null as string | null,
 		searchQuery: '',
@@ -27,7 +17,7 @@ export const useMovies = defineStore('movies', {
 			genre: string | undefined
 		) {
 			try {
-				const response = await axios.get<Movie[]>(`${BASE_URL}/movie`, {
+				const response = await axios.get<MovieType[]>(`${BASE_URL}/movie`, {
 					params: { count, page, title, genre },
 				})
 				if (response.status === 200) {
@@ -56,7 +46,7 @@ export const useMovies = defineStore('movies', {
 			// Разбиваем строку поиска на отдельные слова и удаляем пустые
 			const queryWords = lowerCaseQuery.split(' ').filter(word => word.trim())
 			const uniqueMovieIds = new Set() // Создаём набор для уникальных идентификаторов фильмов
-			const result: Movie[] = []
+			const result: MovieType[] = []
 
 			// Если строка поиска пустая, возвращаем пустой массив
 			if (queryWords.length === 0) {

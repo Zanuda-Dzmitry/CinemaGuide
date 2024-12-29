@@ -33,13 +33,13 @@
 <script setup lang="ts">
 import { useMovies } from '~/storage/movie'
 import back from '../assets/icons/back.svg?component'
+import type { MovieType } from '~/services/types/types'
 
 // Используем store фильмов
 const store = useMovies()
 const route = useRoute()
 const selectedGenre = computed(() => route.params.id as string)
-
-const movies = computed(() => store.movies)
+const movies = ref<MovieType[]>([])
 const PAGE_SIZE = 15
 const page = ref(1)
 const hasMoreMovies = ref(true)
@@ -51,6 +51,8 @@ useHead({
 })
 
 onMounted(async () => {
+	movies.value = store.movies
+
 	await store.loadMovies(PAGE_SIZE, page.value, '', selectedGenre.value) // Загружаем фильмы
 })
 
