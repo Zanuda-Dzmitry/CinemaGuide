@@ -144,7 +144,7 @@ const movies = computed(() => data.value)
 				display: flex;
 
 				.movie_slide {
-					width: 224px;
+					width: 224px !important;
 					.card {
 						display: flex;
 						width: 100%;
