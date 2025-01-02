@@ -1,8 +1,8 @@
 <template>
-	<div class="modal-overlay" @click.self="close">
+	<div v-if="isOpen" class="modal-overlay" @click.self="closeModal">
 		<div class="modal-content">
 			<logoSvg class="logo" />
-			<button class="close-button" @click="close">
+			<button class="close-button" @click="closeModal">
 				<closeSvg />
 			</button>
 			<h2 v-if="!isLogin && !registrationSuccess" class="auth-title">
@@ -120,6 +120,7 @@
 </template>
 
 <script lang="ts" setup>
+import { useModalStore } from '@/storage/modal'
 import { useAuthStore } from '@/storage/auth'
 import passwordSvg from '../assets/icons/password.svg?component'
 import mailSvg from '../assets/icons/icon_mail.svg?component'
@@ -132,19 +133,19 @@ import {
 	useForm,
 } from 'vee-validate'
 import * as yup from 'yup'
-import modalState from '~/utils/modalStore'
 
 const authStore = useAuthStore()
 const isLogin = ref(true) // состояние для определения, находимся ли мы на экране логина
 const errorMessage = ref('')
 const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
 
-// // Флаг, указывающий, какая схема использовать
-// const isRegistration = false
+const modalStore = useModalStore()
+const isOpen = computed(() => modalStore.isOpen)
 
-const close = () => {
-	modalState.toggleModal()
+const closeModal = () => {
+	modalStore.close()
 }
+
 const switchToRegister = () => {
 	isLogin.value = false // переключаем на регистрацию
 }
@@ -206,7 +207,7 @@ const onSubmit: SubmissionHandler<
 	try {
 		if (isLogin.value) {
 			await authStore.login(values.email, values.password)
-			close() // Закрываем модальное окно после успешного входа
+			modalStore.close() // Закрываем модальное окно после успешного входа
 			errorMessage.value = '' // Сброс сообщения об ошибке
 		} else {
 			await authStore.register(
