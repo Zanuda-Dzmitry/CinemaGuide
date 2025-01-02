@@ -6,7 +6,7 @@
 			</header>
 			<main class="main">
 				<slot />
-				<Modal v-if="modalState.isModalOpen" @close="modalState.toggleModal" />
+				<Modal />
 			</main>
 			<Footer class="footer container" />
 		</div>
@@ -14,7 +14,6 @@
 </template>
 
 <script setup lang="ts">
-import modalState from '~/utils/modalStore'
 const { $viewport } = useNuxtApp()
 
 const containerClass = computed(() => {

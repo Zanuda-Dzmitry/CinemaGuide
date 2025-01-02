@@ -3,7 +3,7 @@
 		<button
 			class="auth-button"
 			:class="{ active_border: isPathActive('/profile') }"
-			@click="user ? router.push('/profile') : modalState.toggleModal()"
+			@click="user ? router.push('/profile') : modalStore.open()"
 		>
 			<profileSvg />
 			{{ user ? user.name : 'Вход' }}
@@ -14,9 +14,10 @@
 <script lang="ts" setup>
 import { useAuthStore } from '@/storage/auth'
 import { useRouter } from 'vue-router'
-import modalState from '~/utils/modalStore'
+import { useModalStore } from '@/storage/modal'
 import profileSvg from '../assets/icons/profile.svg?component'
 
+const modalStore = useModalStore()
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
