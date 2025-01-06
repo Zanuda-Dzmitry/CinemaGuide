@@ -1,11 +1,14 @@
 <template>
 	<div class="container">
-		<section class="genre">
+		<div class="error_global" v-if="error">
+			Произошла ошибка: {{ error.message }}
+		</div>
+		<section class="genre" v-else-if="data">
 			<h2 class="genre_title">Жанры фильмов</h2>
 			<div class="genre_wrapper">
 				<NuxtLink
 					class="genre_link"
-					v-for="(genre, index) in genres"
+					v-for="(genre, index) in propsGenres.genres"
 					:key="index"
 					:to="`/genres/${genre}`"
 				>
@@ -22,15 +25,21 @@
 <script setup lang="ts">
 import { genrePosters } from '~/constants'
 import { useMovieGenre } from '../storage/movieGenre'
-import type { Genre } from '../services/types/types'
 
-const store = useMovieGenre()
-const { data } = useAsyncData<Genre[]>('movieGenre', async () => {
-	await Promise.all([store.fetchMovieGenre()])
-	return store.movieGenre
+const { start, finish } = useLoadingIndicator()
+
+const { data: data, error } = useAsyncData('movieGenre', async () => {
+	start()
+	try {
+		const store = useMovieGenre()
+		await store.fetchMovieGenre()
+		return store
+	} finally {
+		finish()
+	}
 })
 
-const genres = computed(() => data.value)
+const propsGenres = computed(() => ({ genres: data.value?.movieGenre ?? [] }))
 const getPoster = (poster: string | number) => genrePosters[poster] ?? ''
 </script>
 
