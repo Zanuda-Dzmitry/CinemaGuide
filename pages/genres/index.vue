@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import GenresList from '~/components/genresList.vue'
+import GenresList from '~/components/GenresList.vue'
 </script>
 
 <template>

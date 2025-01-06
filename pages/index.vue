@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Cover from '~/components/cover.vue'
-import Top10Movie from '~/components/top10Movie.vue'
+import Cover from '~/components/Cover.vue'
+import Top10Movie from '~/components/Top10Movie.vue'
 
 definePageMeta({
 	title: 'Главная',
