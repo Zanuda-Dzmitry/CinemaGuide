@@ -79,7 +79,6 @@ const isFavorite = computed(() =>
 )
 
 const toggleFavorites = async (movieId: string) => {
-	console.log(user.value)
 	if (user.value) {
 		if (!isFavorite.value) {
 			await authStore.addFavorites(movieId)

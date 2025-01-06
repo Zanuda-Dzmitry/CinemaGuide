@@ -1,7 +1,8 @@
 <template>
-	<div v-if="isLoading">Загрузка...</div>
-	<div v-else-if="error">Произошла ошибка: {{ error.message }}</div>
-	<Movie :movieProps v-else />
+	<div v-if="error">Произошла ошибка: {{ error.message }}</div>
+	<div v-else-if="movie">
+		<Movie :movieProps="movieProps" />
+	</div>
 
 	<div class="container" v-if="movie">
 		<section class="movie_about">
@@ -42,6 +43,7 @@
 import Movie from '~/components/Movie.vue'
 import { useMovieId } from '~/storage/movieId'
 
+const { start, finish } = useLoadingIndicator()
 const route = useRoute()
 const movieId = computed(() => route.params.id as string)
 
@@ -50,9 +52,14 @@ const {
 	status,
 	error,
 } = await useAsyncData('movieId', async () => {
-	const store = useMovieId()
-	await store.fetchMovieId(movieId.value)
-	return store
+	start()
+	try {
+		const store = useMovieId()
+		await store.fetchMovieId(movieId.value)
+		return store
+	} finally {
+		finish()
+	}
 })
 
 const isLoading = computed(() => status.value === 'pending')
