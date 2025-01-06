@@ -1,23 +1,27 @@
 export type MovieType = {
-	trailerYouTubeId: string
-	awardsSummary: string
-	production: string
-	director: string
-	revenue: string
-	budget: string
+	trailerYouTubeId?: string
+	awardsSummary?: string
+	production?: string
+	director?: string
+	revenue?: string
+	budget?: string
 	id: number
 	title: string
-	originalTitle: string
-	language: string
-	releaseYear: number
-	genres: []
+	originalTitle?: string
+	language?: string
+	releaseYear?: number
+	genres: never[]
 	plot: string
 	runtime: number
-	posterUrl: string
-	movieBackdropUrl: string
-	backdropUrl: string
-	trailerUrl: string
-	tmdbRating: number
+	posterUrl?: string
+	movieBackdropUrl?: string
+	backdropUrl?: string
+	trailerUrl?: string
+	tmdbRating?: number
+	rating: number
+	youTubeId: string
+	backdrop: string
+	year: number
 }
 
 export type User = {
