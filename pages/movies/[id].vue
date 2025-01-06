@@ -1,45 +1,36 @@
 <template>
-	<Movie
-		:id="id"
-		:title="title"
-		:plot="plot"
-		:rating="rating"
-		:year="year"
-		:genres="genres"
-		:runtime="runtime"
-		:backdrop="backdrop"
-		:youTubeId="youTubeId || ''"
-		v-if="data"
-	/>
+	<div v-if="isLoading">Загрузка...</div>
+	<div v-else-if="error">Произошла ошибка: {{ error.message }}</div>
+	<Movie :movieProps v-else />
 
-	<div class="container" v-if="data">
+	<div class="container" v-if="movie">
 		<section class="movie_about">
 			<div class="movie_info">
 				<h2>О фильме</h2>
 				<ul>
 					<li>
 						<span class="movie_info-title"> Язык оригинала </span>
-						<span class="movie_info-value">{{ language }}</span>
+						<span class="movie_info-value">{{ movieProps.language }}</span>
 					</li>
 					<li>
 						<span class="movie_info-title"> Бюджет </span>
-						<span class="movie_info-value">{{ budget }}</span>
+						<span class="movie_info-value">{{ movieProps.budget }}</span>
 					</li>
 					<li>
 						<span class="movie_info-title"> Выручка </span>
-						<span class="movie_info-value">{{ revenue }}</span>
+						<span class="movie_info-value">{{ movieProps.revenue }}</span>
 					</li>
 					<li>
 						<span class="movie_info-title"> Режиссёр </span>
-						<span class="movie_info-value">{{ director }}</span>
+						<span class="movie_info-value">{{ movieProps.director }}</span>
 					</li>
 					<li>
 						<span class="movie_info-title"> Продакшен </span>
-						<span class="movie_info-value">{{ production }}</span>
+						<span class="movie_info-value">{{ movieProps.production }}</span>
 					</li>
 					<li>
 						<span class="movie_info-title"> Награды </span>
-						<span class="movie_info-value">{{ awardsSummary }}</span>
+						<span class="movie_info-value">{{ movieProps.awardsSummary }}</span>
 					</li>
 				</ul>
 			</div>
@@ -53,49 +44,39 @@ import { useMovieId } from '~/storage/movieId'
 
 const route = useRoute()
 const movieId = computed(() => route.params.id as string)
-const store = useMovieId()
 
-const { data } = useAsyncData('movieId', async () => {
-	await Promise.all([store.fetchMovieId(movieId.value)])
-	return {
-		movieId: store.movieId,
-		movieTitle: store.movieTitle,
-		moviePlot: store.moviePlot,
-		movieRating: store.movieRating,
-		movieYear: store.movieYear,
-		movieGenre: store.movieGenre,
-		movieRuntime: store.movieRuntime,
-		moviePoster: store.moviePoster,
-		movieBackdrop: store.movieBackdrop,
-		movieBudget: store.movieBudget,
-		movieLanguage: store.movieLanguage,
-		movieRevenue: store.movieRevenue,
-		movieDirector: store.movieDirector,
-		movieProduction: store.movieProduction,
-		movieAwardsSummary: store.movieAwardsSummary,
-		movieTrailerYouTubeId: store.movieTrailerYouTubeId,
-	}
+const {
+	data: movie,
+	status,
+	error,
+} = await useAsyncData('movieId', async () => {
+	const store = useMovieId()
+	await store.fetchMovieId(movieId.value)
+	return store
 })
 
-const id = computed(() => data.value?.movieId ?? 0)
-const title = computed(() => data.value?.movieTitle || '')
-const plot = computed(() => data.value?.moviePlot || '')
-const rating = computed(() => data.value?.movieRating || 0)
-const year = computed(() => data.value?.movieYear || 0)
-const genres = computed(() => data.value?.movieGenre || [])
-const runtime = computed(() => data.value?.movieRuntime || 0)
-const poster = computed(() => data.value?.moviePoster || '')
-const backdrop = computed(() => data.value?.movieBackdrop || '')
-const budget = computed(() => data.value?.movieBudget)
-const language = computed(() => data.value?.movieLanguage)
-const revenue = computed(() => data.value?.movieRevenue)
-const director = computed(() => data.value?.movieDirector)
-const production = computed(() => data.value?.movieProduction)
-const awardsSummary = computed(() => data.value?.movieAwardsSummary)
-const youTubeId = computed(() => data.value?.movieTrailerYouTubeId)
+const isLoading = computed(() => status.value === 'pending')
+
+const movieProps = computed(() => ({
+	id: movie.value?.movieId || 0,
+	title: movie.value?.movieTitle || '',
+	plot: movie.value?.moviePlot || '',
+	rating: movie.value?.movieRating || 0,
+	year: movie.value?.movieYear || 0,
+	genres: movie.value?.movieGenre || [],
+	runtime: movie.value?.movieRuntime || 0,
+	backdrop: movie.value?.movieBackdrop || '',
+	youTubeId: movie.value?.movieTrailerYouTubeId || '',
+	language: movie.value?.movieLanguage || '',
+	budget: movie.value?.movieBudget,
+	revenue: movie.value?.movieRevenue,
+	director: movie.value?.movieDirector,
+	production: movie.value?.movieProduction,
+	awardsSummary: movie.value?.movieAwardsSummary,
+}))
 
 useHead({
-	title: () => `${data.value?.movieTitle}`,
+	title: () => `${movie.value?.movieTitle}`,
 })
 </script>
 

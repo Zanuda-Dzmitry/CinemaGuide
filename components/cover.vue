@@ -1,43 +1,37 @@
 <template>
 	<div v-if="isLoading">Загрузка...</div>
+	<div v-else-if="error">Произошла ошибка: {{ error.message }}</div>
 	<div v-else>
-		<Movie
-			:id="id"
-			:title="title"
-			:plot="plot"
-			:rating="rating"
-			:year="year"
-			:genres="genres"
-			:runtime="runtime"
-			:backdrop="backdrop"
-			:youTubeId="youTubeId"
-		/>
+		<Movie :movieProps />
 	</div>
 </template>
 
 <script lang="ts" setup>
-import Movie from './Movie.vue'
 import { useMovieRandom } from '../storage/movieRandom'
 
-const isLoading = ref(true)
-const store = useMovieRandom()
-
-async function fetchData() {
+const {
+	data: movie,
+	status,
+	error,
+} = await useAsyncData('randomMovie', async () => {
+	const store = useMovieRandom()
 	await store.fetchMovieRandom()
-	isLoading.value = false
-}
+	return store
+})
 
-fetchData()
+const isLoading = computed(() => status.value === 'pending')
 
-const title = computed(() => store.movieTitle || '')
-const plot = computed(() => store.moviePlot || '')
-const rating = computed(() => store.movieRating || 0)
-const year = computed(() => store.movieYear || 0)
-const genres = computed(() => store.movieGenre || [])
-const runtime = computed(() => store.movieRuntime || 0)
-const backdrop = computed(() => store.movieBackdrop || '')
-const id = computed(() => store.movieId || 0)
-const youTubeId = computed(() => store.movieTrailerYouTubeId || '')
+const movieProps = computed(() => ({
+	id: movie.value?.movieId || 0,
+	title: movie.value?.movieTitle || '',
+	plot: movie.value?.moviePlot || '',
+	rating: movie.value?.movieRating || 0,
+	year: movie.value?.movieYear || 0,
+	genres: movie.value?.movieGenre || [],
+	runtime: movie.value?.movieRuntime || 0,
+	backdrop: movie.value?.movieBackdrop || '',
+	youTubeId: movie.value?.movieTrailerYouTubeId || '',
+}))
 </script>
 
 <style lang="scss" scoped>

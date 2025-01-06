@@ -2,22 +2,24 @@
 	<div class="container">
 		<section class="movie">
 			<div class="movie_backdrop">
-				<NuxtImg :src="backdrop" alt="Backdrop" />
+				<NuxtImg :src="movieProps.backdrop" alt="Backdrop" />
 			</div>
 			<div class="movie_content">
 				<div class="movie_content-top">
 					<ColorChanger
 						class="movie_rating"
-						:rating="rating"
+						:rating="movieProps.rating"
 						customClass="star_svg"
 					/>
-					<span>{{ year }}</span>
-					<span v-for="genre in genres" :key="genre">{{ genre }}</span>
-					<span>{{ convertMinutesToHoursAndMinutes(runtime) }}</span>
+					<span>{{ movieProps.year }}</span>
+					<span v-for="genre in movieProps.genres" :key="genre">{{
+						genre
+					}}</span>
+					<span>{{ convertMinutesToHoursAndMinutes(movieProps.runtime) }}</span>
 				</div>
 				<div class="movie_content-center">
-					<h2>{{ title }}</h2>
-					<p>{{ plot }}</p>
+					<h2>{{ movieProps.title }}</h2>
+					<p>{{ movieProps.plot }}</p>
 				</div>
 				<div
 					class="movie_content-bottom"
@@ -27,12 +29,12 @@
 						Треилер
 					</button>
 					<div class="movie_line">
-						<NuxtLink v-if="isHomePage" :to="`/movies/${id}`">
+						<NuxtLink v-if="isHomePage" :to="`/movies/${movieProps.id}`">
 							О фильме</NuxtLink
 						>
 						<button
 							class="favorite_btn"
-							@click="toggleFavorites(id.toString())"
+							@click="toggleFavorites(movieProps.id.toString())"
 						>
 							<favoritesSvg
 								class="favorite"
@@ -47,30 +49,24 @@
 			</div>
 		</section>
 	</div>
-	<VideoPlayer :videoId="videoId" :title="title" :close="close" />
+	<VideoPlayer :videoId="videoId" :title="movieProps.title" :close="close" />
 </template>
 <script lang="ts" setup>
 import favoritesSvg from '../assets/icons/icon_favorite.svg?component'
 import updateSvg from '../assets/icons/update.svg?component'
 import { useAuthStore } from '~/storage/auth'
-import modalState from '~/utils/modalStore'
+import { useModalStore } from '@/storage/modal'
 import { useMovieRandom } from '~/storage/movieRandom'
+import type { MovieType } from '../services/types/types'
 
 const randomStore = useMovieRandom()
+const modalStore = useModalStore()
 const route = useRoute()
 const authStore = useAuthStore()
 const videoId = ref('')
 
 const props = defineProps<{
-	id: number
-	title: string
-	plot: string
-	rating: number
-	year: number
-	genres: string[]
-	runtime: number
-	backdrop: string
-	youTubeId: string
+	movieProps: MovieType
 }>()
 
 const isHomePage = computed(() => {
@@ -79,10 +75,11 @@ const isHomePage = computed(() => {
 
 const user = computed(() => authStore.user)
 const isFavorite = computed(() =>
-	user.value?.favorites.includes(props.id.toString())
+	user.value?.favorites.includes(props.movieProps.id.toString())
 )
 
 const toggleFavorites = async (movieId: string) => {
+	console.log(user.value)
 	if (user.value) {
 		if (!isFavorite.value) {
 			await authStore.addFavorites(movieId)
@@ -90,7 +87,7 @@ const toggleFavorites = async (movieId: string) => {
 			await authStore.removeFavorites(movieId)
 		}
 	} else {
-		modalState.toggleModal()
+		modalStore.open()
 	}
 }
 
@@ -100,7 +97,7 @@ const refreshMovie = async () => {
 }
 
 const openVideoPlayer = () => {
-	videoId.value = props.youTubeId
+	videoId.value = props.movieProps.youTubeId
 }
 
 const close = () => {
