@@ -30,7 +30,7 @@ export default defineNuxtConfig({
 					href: 'https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap',
 					rel: 'stylesheet',
 				},
-				{ rel: 'icon', type: 'image/x-icon', href: '/CinemaGuide/favicon.ico' },
+				{ rel: 'icon', type: 'image/x-icon', href: '/CinemaGuide/favicon.png' },
 			],
 		},
 		baseURL: '/CinemaGuide/',
