@@ -1,6 +1,10 @@
 <template>
 	<div class="container">
-		<div class="wrapper">
+		<Loading v-if="isLoading" />
+		<div class="error_global" v-if="error">
+			Произошла ошибка: {{ error.message }}
+		</div>
+		<div class="wrapper" v-if="movieData">
 			<h2>Топ 10 фильмов</h2>
 			<!-- Используем Swiper для мобильной версии -->
 			<client-only>
@@ -14,8 +18,8 @@
 					:slides-offset-before="20"
 				>
 					<swiper-slide
-						v-for="(movie, index) in movies"
-						:key="index"
+						v-for="(movie, index) in movieList"
+						:key="movie.id"
 						class="movie_slide"
 						style="width: 224px"
 					>
@@ -30,8 +34,8 @@
 					<NuxtLink
 						class="card"
 						:to="`/movies/${movie.id}`"
-						v-for="(movie, index) in movies"
-						:key="index"
+						v-for="(movie, index) in movieList"
+						:key="movie.id"
 					>
 						<span>{{ index + 1 }}</span>
 						<img class="movie_poster" :src="movie.posterUrl" alt="Poster" />
@@ -52,18 +56,24 @@ const containerClass = computed(() => {
 	return $viewport.matches('mobile_small')
 })
 
-interface Movie {
-	id: number
-	posterUrl: string
-}
+const { start, finish } = useLoadingIndicator()
 
-const store = useMovieTop10()
-const { data } = useAsyncData<Movie[]>('movieTop10', async () => {
-	await Promise.all([store.fetchMovieTop10()])
-	return store.movieTop10
+const {
+	data: movieData,
+	status,
+	error,
+} = useAsyncData('movieTop10', async () => {
+	start()
+	try {
+		const store = useMovieTop10()
+		await store.fetchMovieTop10()
+		return store.movieTop10
+	} finally {
+		finish()
+	}
 })
-
-const movies = computed(() => data.value)
+const isLoading = computed(() => status.value === 'pending')
+const movieList = computed(() => movieData.value)
 </script>
 
 <style lang="scss" scoped>
