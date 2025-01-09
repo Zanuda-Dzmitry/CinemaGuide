@@ -1,4 +1,5 @@
 <template>
+	<Loading v-if="isLoading" />
 	<div v-if="error">Произошла ошибка: {{ error.message }}</div>
 	<div v-else-if="movie">
 		<Movie :movieProps="movieProps" />
@@ -10,7 +11,11 @@ import { useMovieRandom } from '../storage/movieRandom'
 
 const { start, finish } = useLoadingIndicator()
 
-const { data: movie, error } = await useAsyncData('randomMovie', async () => {
+const {
+	data: movie,
+	status,
+	error,
+} = await useAsyncData('randomMovie', async () => {
 	start()
 	try {
 		const store = useMovieRandom()
@@ -21,6 +26,7 @@ const { data: movie, error } = await useAsyncData('randomMovie', async () => {
 	}
 })
 
+const isLoading = computed(() => status.value === 'pending')
 const movieProps = computed(() => ({
 	id: movie.value?.movieId ?? 0,
 	title: movie.value?.movieTitle ?? '',

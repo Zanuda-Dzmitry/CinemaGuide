@@ -1,5 +1,8 @@
 <template>
-	<div v-if="error">Произошла ошибка: {{ error.message }}</div>
+	<Loading v-if="isLoading" />
+	<div class="error_global" v-if="error">
+		Произошла ошибка: {{ error.message }}
+	</div>
 	<div v-else-if="movie">
 		<Movie :movieProps="movieProps" />
 	</div>

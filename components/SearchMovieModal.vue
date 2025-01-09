@@ -15,7 +15,7 @@
 							<div class="movie-content">
 								<ColorChanger
 									class="rating"
-									:rating="movie.tmdbRating"
+									:rating="movie.tmdbRating ?? 0"
 									customClass="star_svg"
 								/>
 								<span>{{ movie.releaseYear }}</span>
@@ -43,7 +43,7 @@
 					<div class="movie-content">
 						<ColorChanger
 							class="rating"
-							:rating="movie.tmdbRating"
+							:rating="movie.tmdbRating ?? 0"
 							customClass="star_svg"
 						/>
 						<span>{{ movie.releaseYear }}</span>

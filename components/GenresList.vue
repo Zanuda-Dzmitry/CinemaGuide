@@ -1,5 +1,6 @@
 <template>
 	<div class="container">
+		<Loading v-if="isLoading" />
 		<div class="error_global" v-if="error">
 			Произошла ошибка: {{ error.message }}
 		</div>
@@ -28,7 +29,11 @@ import { useMovieGenre } from '../storage/movieGenre'
 
 const { start, finish } = useLoadingIndicator()
 
-const { data: data, error } = useAsyncData('movieGenre', async () => {
+const {
+	data: data,
+	status,
+	error,
+} = useAsyncData('movieGenre', async () => {
 	start()
 	try {
 		const store = useMovieGenre()
@@ -39,7 +44,9 @@ const { data: data, error } = useAsyncData('movieGenre', async () => {
 	}
 })
 
+const isLoading = computed(() => status.value === 'pending')
 const propsGenres = computed(() => ({ genres: data.value?.movieGenre ?? [] }))
+console.log(propsGenres)
 const getPoster = (poster: string | number) => genrePosters[poster] ?? ''
 </script>
 
