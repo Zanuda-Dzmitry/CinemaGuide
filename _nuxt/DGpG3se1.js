@@ -1,0 +1,1 @@
+import{a as s,d as t}from"./DHLrws4d.js";import{m as a}from"./C3zKJFoL.js";const r=a("movie",{state:()=>({movie:{}}),actions:{async fetchMovieId(o){const e=await s.get(`${t}/${o}`);this.movie=e.data}}});export{r as u};

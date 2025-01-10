@@ -1,1 +1,0 @@
-import{e as t,o,c as s,a as n,b as a,_ as c}from"./DduXzU7M.js";const _={class:"wrapper"},r={class:"content"},l=t({__name:"genres",setup(p){return(d,m)=>{const e=c;return o(),s("div",_,[n("div",r,[a(e)])])}}});export{l as default};
