@@ -1,40 +1,38 @@
 <template>
-	<Loading v-if="isLoading" />
-	<div class="error_global" v-if="error">
-		Произошла ошибка: {{ error.message }}
-	</div>
-	<div v-else-if="movie">
-		<Movie :movieProps="movieProps" />
+	<div>
+		<Movie :movieProps="movieProps" :isLoading="isLoading" :error="error" />
 	</div>
 
-	<div class="container" v-if="movie">
+	<div class="container" v-if="movieData">
 		<section class="movie_about">
 			<div class="movie_info">
 				<h2>О фильме</h2>
 				<ul>
 					<li>
 						<span class="movie_info-title"> Язык оригинала </span>
-						<span class="movie_info-value">{{ movieProps.language }}</span>
+						<span class="movie_info-value">{{ movieProps?.language }}</span>
 					</li>
 					<li>
 						<span class="movie_info-title"> Бюджет </span>
-						<span class="movie_info-value">{{ movieProps.budget }}</span>
+						<span class="movie_info-value">{{ movieProps?.budget }}</span>
 					</li>
 					<li>
 						<span class="movie_info-title"> Выручка </span>
-						<span class="movie_info-value">{{ movieProps.revenue }}</span>
+						<span class="movie_info-value">{{ movieProps?.revenue }}</span>
 					</li>
 					<li>
 						<span class="movie_info-title"> Режиссёр </span>
-						<span class="movie_info-value">{{ movieProps.director }}</span>
+						<span class="movie_info-value">{{ movieProps?.director }}</span>
 					</li>
 					<li>
 						<span class="movie_info-title"> Продакшен </span>
-						<span class="movie_info-value">{{ movieProps.production }}</span>
+						<span class="movie_info-value">{{ movieProps?.production }}</span>
 					</li>
 					<li>
 						<span class="movie_info-title"> Награды </span>
-						<span class="movie_info-value">{{ movieProps.awardsSummary }}</span>
+						<span class="movie_info-value">{{
+							movieProps?.awardsSummary
+						}}</span>
 					</li>
 				</ul>
 			</div>
@@ -51,7 +49,7 @@ const route = useRoute()
 const movieId = computed(() => route.params.id as string)
 
 const {
-	data: movie,
+	data: movieData,
 	status,
 	error,
 } = await useAsyncData('movieId', async () => {
@@ -59,34 +57,17 @@ const {
 	try {
 		const store = useMovieId()
 		await store.fetchMovieId(movieId.value)
-		return store
+		return store.movie
 	} finally {
 		finish()
 	}
 })
 
 const isLoading = computed(() => status.value === 'pending')
-
-const movieProps = computed(() => ({
-	id: movie.value?.movieId || 0,
-	title: movie.value?.movieTitle || '',
-	plot: movie.value?.moviePlot || '',
-	rating: movie.value?.movieRating || 0,
-	year: movie.value?.movieYear || 0,
-	genres: movie.value?.movieGenre || [],
-	runtime: movie.value?.movieRuntime || 0,
-	backdrop: movie.value?.movieBackdrop || '',
-	youTubeId: movie.value?.movieTrailerYouTubeId || '',
-	language: movie.value?.movieLanguage || '',
-	budget: movie.value?.movieBudget,
-	revenue: movie.value?.movieRevenue,
-	director: movie.value?.movieDirector,
-	production: movie.value?.movieProduction,
-	awardsSummary: movie.value?.movieAwardsSummary,
-}))
+const movieProps = computed(() => movieData.value)
 
 useHead({
-	title: () => `${movie.value?.movieTitle}`,
+	title: () => `${movieProps.value?.title}`,
 })
 </script>
 

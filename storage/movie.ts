@@ -1,10 +1,10 @@
 import { BASE_URL } from '~/constants'
 import axios from 'axios'
-import type { MovieType } from '~/services/types/types'
+import type { Movie } from '~/services/types/types'
 
 export const useMovies = defineStore('movies', {
 	state: () => ({
-		movies: [] as MovieType[],
+		movies: [] as Movie[],
 		hasMoreMovies: false,
 		error: null as string | null,
 		searchQuery: '',
@@ -16,22 +16,14 @@ export const useMovies = defineStore('movies', {
 			title: string | undefined,
 			genre: string | undefined
 		) {
-			try {
-				const response = await axios.get<MovieType[]>(`${BASE_URL}/movie`, {
-					params: { count, page, title, genre },
-				})
-				if (response.status === 200) {
-					if (response.data.length > 0) {
-						this.movies.push(...response.data)
-						this.hasMoreMovies = true // Еще есть фильмы для загрузки
-					} else {
-						this.hasMoreMovies = false // Нет больше фильмов для загрузки
-					}
-				} else {
-					this.error = 'Ошибка при загрузке фильмов'
-				}
-			} catch (err) {
-				this.error = (err as Error).message || 'Ошибка при загрузке фильмов'
+			const response = await axios.get<Movie[]>(`${BASE_URL}/movie`, {
+				params: { count, page, title, genre },
+			})
+			if (response.data.length > 0) {
+				this.movies.push(...response.data)
+				this.hasMoreMovies = true // Еще есть фильмы для загрузки
+			} else {
+				this.hasMoreMovies = false // Нет больше фильмов для загрузки
 			}
 		},
 
@@ -46,7 +38,7 @@ export const useMovies = defineStore('movies', {
 			// Разбиваем строку поиска на отдельные слова и удаляем пустые
 			const queryWords = lowerCaseQuery.split(' ').filter(word => word.trim())
 			const uniqueMovieIds = new Set() // Создаём набор для уникальных идентификаторов фильмов
-			const result: MovieType[] = []
+			const result: Movie[] = []
 
 			// Если строка поиска пустая, возвращаем пустой массив
 			if (queryWords.length === 0) {

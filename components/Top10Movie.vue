@@ -2,7 +2,7 @@
 	<div class="container">
 		<Loading v-if="isLoading" />
 		<div class="error_global" v-if="error">
-			Произошла ошибка: {{ error.message }}
+			Произошла ошибка при загрузке топ 10 фильмов: {{ error.message }}
 		</div>
 		<div class="wrapper" v-if="movieData">
 			<h2>Топ 10 фильмов</h2>
@@ -72,6 +72,7 @@ const {
 		finish()
 	}
 })
+
 const isLoading = computed(() => status.value === 'pending')
 const movieList = computed(() => movieData.value)
 </script>

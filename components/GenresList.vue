@@ -2,9 +2,9 @@
 	<div class="container">
 		<Loading v-if="isLoading" />
 		<div class="error_global" v-if="error">
-			Произошла ошибка: {{ error.message }}
+			Произошла ошибка при загрузки жанров: {{ error.message }}
 		</div>
-		<section class="genre" v-else-if="data">
+		<section class="genre" v-if="data">
 			<h2 class="genre_title">Жанры фильмов</h2>
 			<div class="genre_wrapper">
 				<NuxtLink

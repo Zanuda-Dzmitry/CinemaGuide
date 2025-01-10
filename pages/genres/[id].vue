@@ -1,16 +1,20 @@
 <template>
 	<div class="container">
-		<section class="genre">
+		<Loading v-if="isLoading" />
+		<div class="error_global" v-if="error">
+			Произошла ошибка при загрузки фильмов: {{ error.message }}
+		</div>
+		<section class="genre" v-if="movies">
 			<div class="genre_nav">
 				<NuxtLink class="genre_nav-link" :to="`/genres`">
-					<back />
+					<backSvg />
 				</NuxtLink>
 				<h2 class="genre_title">{{ capitalizeFirstLetter(selectedGenre) }}</h2>
 			</div>
 			<div class="genre_wrapper">
 				<NuxtLink
 					class="genre_link"
-					v-for="movie in movies"
+					v-for="movie in moviesProps"
 					:key="movie.id"
 					:to="`/movies/${movie.id}`"
 				>
@@ -23,7 +27,7 @@
 					class="genre_more"
 					@click="loadMoreMovies"
 				>
-					{{ isLoading ? 'Загрузка...' : 'Показать еще' }}
+					Показать еще
 				</button>
 			</div>
 		</section>
@@ -32,30 +36,33 @@
 
 <script setup lang="ts">
 import { useMovies } from '~/storage/movie'
-import back from '../assets/icons/back.svg?component'
-import type { MovieType } from '~/services/types/types'
+import backSvg from '../assets/icons/back.svg?component'
 
-// Используем store фильмов
 const store = useMovies()
 const route = useRoute()
 const selectedGenre = computed(() => route.params.id as string)
-const movies = ref<MovieType[]>([])
 const PAGE_SIZE = 15
 const page = ref(1)
 const hasMoreMovies = ref(true)
-const isLoading = ref(false)
 
-// Установка заголовка страницы
-useHead({
-	title: () => `Жанр: ${selectedGenre.value}`,
+const { start, finish } = useLoadingIndicator()
+
+const {
+	data: movies,
+	status,
+	error,
+} = useAsyncData('movies', async () => {
+	start()
+	try {
+		await store.loadMovies(PAGE_SIZE, page.value, '', selectedGenre.value)
+		return store.movies
+	} finally {
+		finish()
+	}
 })
 
-onMounted(async () => {
-	movies.value = store.movies
-
-	await store.loadMovies(PAGE_SIZE, page.value, '', selectedGenre.value) // Загружаем фильмы
-})
-
+const isLoading = computed(() => status.value === 'pending')
+const moviesProps = computed(() => movies.value)
 // Приводим заголовок в верхний регистр
 function capitalizeFirstLetter(str: string) {
 	if (!str) return str // Проверка на пустую строку
@@ -65,16 +72,14 @@ function capitalizeFirstLetter(str: string) {
 // Функция загрузки дополнительных фильмов
 const loadMoreMovies = async () => {
 	if (!hasMoreMovies.value) return // Если фильмов больше нет, не продолжаем
-	isLoading.value = true // Устанавливаем состояние загрузки
+	status.value = 'pending'
 	page.value++ // Увеличиваем номер страницы
 	await store.loadMovies(PAGE_SIZE, page.value, '', selectedGenre.value)
-	isLoading.value = false // Отключаем состояние загрузки
+	status.value = 'idle'
 }
-
-// Очистка данных при выходе со страницы
-onBeforeUnmount(() => {
-	store.movies = [] // Очищаем массив фильмов
-	page.value = 1 // Сбрасываем номер страницы
+// Установка заголовка страницы
+useHead({
+	title: () => `Жанр: ${selectedGenre.value}`,
 })
 </script>
 

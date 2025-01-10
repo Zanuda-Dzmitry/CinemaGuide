@@ -1,8 +1,6 @@
 <template>
-	<Loading v-if="isLoading" />
-	<div v-if="error">Произошла ошибка: {{ error.message }}</div>
-	<div v-else-if="movie">
-		<Movie :movieProps="movieProps" />
+	<div>
+		<Movie :movieProps="movieProps" :isLoading="isLoading" :error="error" />
 	</div>
 </template>
 
@@ -20,24 +18,14 @@ const {
 	try {
 		const store = useMovieRandom()
 		await store.fetchMovieRandom()
-		return store
+		return store.movieRandom
 	} finally {
 		finish()
 	}
 })
 
 const isLoading = computed(() => status.value === 'pending')
-const movieProps = computed(() => ({
-	id: movie.value?.movieId ?? 0,
-	title: movie.value?.movieTitle ?? '',
-	plot: movie.value?.moviePlot ?? '',
-	rating: movie.value?.movieRating ?? 0,
-	year: movie.value?.movieYear ?? 0,
-	genres: movie.value?.movieGenre ?? [],
-	runtime: movie.value?.movieRuntime ?? 0,
-	backdrop: movie.value?.movieBackdrop ?? '',
-	youTubeId: movie.value?.movieTrailerYouTubeId ?? '',
-}))
+const movieProps = computed(() => movie.value)
 </script>
 
 <style lang="scss" scoped>

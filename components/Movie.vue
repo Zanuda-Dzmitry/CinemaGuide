@@ -1,25 +1,30 @@
 <template>
 	<div class="container">
-		<section class="movie">
+		<Loading v-if="isLoading" />
+		<div class="error_global" v-if="error">
+			Произошла ошибка при загрузке фильма: {{ error.message }}
+		</div>
+		<section class="movie" v-if="safeMovie">
 			<div class="movie_backdrop">
-				<NuxtImg :src="movieProps.backdrop" alt="Backdrop" />
+				<NuxtImg :src="safeMovie.backdropUrl" alt="Backdrop" />
 			</div>
 			<div class="movie_content">
 				<div class="movie_content-top">
 					<ColorChanger
+						v-if="safeMovie"
 						class="movie_rating"
-						:rating="movieProps.rating"
+						:rating="safeMovie.tmdbRating"
 						customClass="star_svg"
 					/>
-					<span>{{ movieProps.year }}</span>
-					<span v-for="genre in movieProps.genres" :key="genre">{{
+					<span>{{ safeMovie.releaseYear }}</span>
+					<span v-for="genre in safeMovie.genres" :key="genre">{{
 						genre
 					}}</span>
-					<span>{{ convertMinutesToHoursAndMinutes(movieProps.runtime) }}</span>
+					<span>{{ convertMinutesToHoursAndMinutes(safeMovie.runtime) }}</span>
 				</div>
 				<div class="movie_content-center">
-					<h2>{{ movieProps.title }}</h2>
-					<p>{{ movieProps.plot }}</p>
+					<h2>{{ safeMovie.title }}</h2>
+					<p>{{ safeMovie.plot }}</p>
 				</div>
 				<div
 					class="movie_content-bottom"
@@ -29,13 +34,10 @@
 						Треилер
 					</button>
 					<div class="movie_line">
-						<NuxtLink v-if="isHomePage" :to="`/movies/${movieProps.id}`">
+						<NuxtLink v-if="isHomePage" :to="`/movies/${safeMovie.id}`">
 							О фильме</NuxtLink
 						>
-						<button
-							class="favorite_btn"
-							@click="toggleFavorites(movieProps.id.toString())"
-						>
+						<button class="favorite_btn" @click="toggleFavorites(safeMovie.id)">
 							<favoritesSvg
 								class="favorite"
 								:class="{ favoriteFill: isFavorite }"
@@ -49,7 +51,12 @@
 			</div>
 		</section>
 	</div>
-	<VideoPlayer :videoId="videoId" :title="movieProps.title" :close="close" />
+	<VideoPlayer
+		v-if="safeMovie"
+		:videoId="videoId"
+		:title="safeMovie.title"
+		:close="close"
+	/>
 </template>
 <script lang="ts" setup>
 import favoritesSvg from '../assets/icons/icon_favorite.svg?component'
@@ -57,7 +64,7 @@ import updateSvg from '../assets/icons/update.svg?component'
 import { useAuthStore } from '~/storage/auth'
 import { useModalStore } from '@/storage/modal'
 import { useMovieRandom } from '~/storage/movieRandom'
-import type { MovieType } from '../services/types/types'
+import type { Movie } from '../services/types/types'
 
 const randomStore = useMovieRandom()
 const modalStore = useModalStore()
@@ -66,26 +73,29 @@ const authStore = useAuthStore()
 const videoId = ref('')
 
 const props = defineProps<{
-	movieProps: MovieType
+	movieProps: Movie | null
+	isLoading: boolean
+	error: { message: string } | null
 }>()
 
+const safeMovie = computed(() => props.movieProps || null)
 const isHomePage = computed(() => {
 	return route.path === '/'
 })
 
 const user = computed(() => authStore.user)
 const isFavorite = computed(() =>
-	user.value?.favorites.includes(props.movieProps.id.toString())
+	user.value?.favorites.includes(safeMovie.value?.id || '')
 )
 
 const toggleFavorites = async (movieId: string) => {
-	if (user.value) {
+	if (user.value && props.movieProps) {
 		if (!isFavorite.value) {
 			await authStore.addFavorites(movieId)
 		} else {
 			await authStore.removeFavorites(movieId)
 		}
-	} else {
+	} else if (!user.value) {
 		modalStore.open()
 	}
 }
@@ -96,7 +106,9 @@ const refreshMovie = async () => {
 }
 
 const openVideoPlayer = () => {
-	videoId.value = props.movieProps.youTubeId
+	if (safeMovie.value) {
+		videoId.value = safeMovie.value?.trailerYouTubeId || ''
+	}
 }
 
 const close = () => {

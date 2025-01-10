@@ -1,7 +1,7 @@
 <template>
 	<span :class="colorClass" :rating="rating">
 		<icon_star :class="customClass" />
-		{{ rating.toFixed(1) }}
+		{{ formattedRating }}
 	</span>
 </template>
 
@@ -9,20 +9,20 @@
 import icon_star from '../assets/icons/icon_star.svg?component'
 
 const props = defineProps<{
-	rating: number
+	rating: number | undefined
 	customClass: string
 }>()
+
+const formattedRating = computed(() => {
+	return props.rating !== undefined ? props.rating.toFixed(1) : 'N/A'
+})
 // Функция для определения цвета в зависимости от значения
 const colorClass = computed(() => {
-	if (props.rating <= 4.2) {
-		return 'red'
-	} else if (props.rating >= 4.2 && props.rating <= 6.3) {
-		return 'grey'
-	} else if (props.rating >= 6.3 && props.rating <= 7.5) {
-		return 'green'
-	} else {
-		return 'yellow'
-	}
+	if (props.rating === undefined) return 'grey'
+	if (props.rating <= 4.2) return 'red'
+	if (props.rating <= 6.3) return 'grey'
+	if (props.rating <= 7.5) return 'green'
+	return 'yellow'
 })
 </script>
 
