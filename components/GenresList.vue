@@ -46,7 +46,6 @@ const {
 
 const isLoading = computed(() => status.value === 'pending')
 const propsGenres = computed(() => ({ genres: data.value?.movieGenre ?? [] }))
-console.log(propsGenres)
 const getPoster = (poster: string | number) => genrePosters[poster] ?? ''
 </script>
 
