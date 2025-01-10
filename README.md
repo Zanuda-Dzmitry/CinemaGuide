@@ -1,75 +1,56 @@
-# Nuxt 3 Minimal Starter
+# Nuxt App
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+## Описание
 
-## Setup
+Это приложение, основанное на **Nuxt.js**, создано для разработки современных веб-интерфейсов с использованием Vue.js. Проект включает в себя широкий спектр зависимостей, которые позволяют обрабатывать изображения, управлять состоянием, валидировать формы и многое другое.
 
-Make sure to install the dependencies:
+## Установка
 
-```bash
-# npm
-npm install
+1. Клонируйте репозиторий:
 
-# pnpm
-pnpm install
+   ```bash
+   git clone https://github.com/Zanuda-Dzmitry/CinemaGuide.git
+   cd nuxt-app
+   ```
 
-# yarn
-yarn install
+2. Установите необходимые зависимости:
+   ```bash
+   npm install
+   ```
 
-# bun
-bun install
+## Скрипты
+
+Для управления различными этапами разработки доступны следующие сценарии:
+
+- `npm run dev`: Запускает приложение в режиме разработки
+- `npm run build`: Создает оптимизированную сборку приложения
+- `npm run generate`: Генерирует статические файлы для приложения
+- `npm run preview`: Обеспечивает предварительный просмотр собранного приложения
+- `npm run postinstall`: Подготавливает Nuxt после установки
+
+## Основные зависимости
+
+- `@nuxt/image`: Управление изображениями с поддержкой адаптивных форматов
+- `@pinia/nuxt`: Легкий и эффективный менеджер состояния для Vue
+- `@vee-validate/nuxt`: Валидация форм для Vue
+- `@vueuse/core`: Сборник полезных реактивных утилит для Vue
+- `axios`: HTTP-клиент для выполнения запросов
+- `nitropack`: Ускоритель для серверного рендеринга
+- `nuxt-svgo-loader`: Оптимизация SVG-изображений
+- `nuxt-swiper`: Интеграция Swiper для создания слайдеров
+- `nuxt-viewport`: Управление размерами экрана
+- `yup`: Библиотека для валидации объектов
+
+## Зависимости для разработки
+
+- `@nuxt/types`: Типы для Nuxt, необходимые при разработке
+- `@types/vue-router`: Типы для библиотеки vue-router
+- `sass`: Препроцессор CSS для улучшенной работы со стилями
+- `sass-loader`: Загрузчик для обработки SASS-файлов
+- `vue-svg-loader`: Загрузчик для встраивания SVG в компоненты Vue
+
+Эти зависимости позволят вам создать современный и функциональный веб-интерфейс с использованием Vue.js и Nuxt.js.
+
 ```
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
