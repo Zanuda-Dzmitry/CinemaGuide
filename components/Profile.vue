@@ -1,6 +1,7 @@
 <template>
 	<div class="profile">
 		<div class="container">
+			<Loading v-if="isLoading" />
 			<h2>Мой аккаунт</h2>
 			<div class="nav">
 				<button
@@ -46,6 +47,8 @@ const { $viewport } = useNuxtApp()
 const isFirstWordVisible = computed(() => {
 	return $viewport.matches('mobile_small', 'mobile')
 })
+
+defineProps<{ isLoading?: boolean }>()
 
 useHead({
 	title: () => 'Profile',

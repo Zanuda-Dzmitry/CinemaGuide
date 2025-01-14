@@ -63,10 +63,8 @@ import favoritesSvg from '../assets/icons/icon_favorite.svg?component'
 import updateSvg from '../assets/icons/update.svg?component'
 import { useAuthStore } from '~/storage/auth'
 import { useModalStore } from '@/storage/modal'
-import { useMovieRandom } from '~/storage/movieRandom'
 import type { Movie } from '../services/types/types'
 
-const randomStore = useMovieRandom()
 const modalStore = useModalStore()
 const route = useRoute()
 const authStore = useAuthStore()
@@ -76,6 +74,7 @@ const props = defineProps<{
 	movieProps: Movie | null
 	isLoading: boolean
 	error: { message: string } | null
+	refreshMovie: () => void
 }>()
 
 const safeMovie = computed(() => props.movieProps || null)
@@ -83,26 +82,38 @@ const isHomePage = computed(() => {
 	return route.path === '/'
 })
 
-const user = computed(() => authStore.user)
-const isFavorite = computed(() =>
-	user.value?.favorites.includes(safeMovie.value?.id || '')
-)
+const {
+	data: userFavorites,
+	refresh,
+	error,
+} = useAsyncData('userFavorites', async () => {
+	await authStore.profile()
+	const user = authStore.user
+	return user?.favorites || []
+})
 
+// Проверяем, является ли фильм избранным
+const isFavorite = computed(
+	() =>
+		userFavorites.value?.includes(safeMovie.value?.id.toString() || '') || false
+)
+// Переключение избранного
 const toggleFavorites = async (movieId: string) => {
-	if (user.value && props.movieProps) {
-		if (!isFavorite.value) {
-			await authStore.addFavorites(movieId)
-		} else {
-			await authStore.removeFavorites(movieId)
+	if (authStore.user) {
+		try {
+			if (!isFavorite.value) {
+				await authStore.addFavorites(movieId)
+			} else {
+				await authStore.removeFavorites(movieId)
+			}
+			// Обновим список избранных после добавления/удаления
+			await refresh()
+		} catch (error) {
+			console.error('Ошибка при добавления/удаления в избранное', error)
 		}
-	} else if (!user.value) {
+	} else {
 		modalStore.open()
 	}
-}
-
-// Метод для обновления данных о фильме
-const refreshMovie = async () => {
-	await randomStore.refreshMovieData()
 }
 
 const openVideoPlayer = () => {
@@ -174,7 +185,6 @@ const close = () => {
 			flex-wrap: wrap;
 
 			.movie_trailer {
-				// grid-area: btn_1;
 				background: variables.$brand_color;
 				border-radius: 28px;
 				border: 0;

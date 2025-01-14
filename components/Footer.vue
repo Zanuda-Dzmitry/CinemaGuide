@@ -10,16 +10,16 @@
 			</div>
 			<div class="footer_grid-right">
 				<div class="social">
-					<NuxtLink class="social_link">
+					<NuxtLink class="social_link" to="https://vk.com/">
 						<SocialVk />
 					</NuxtLink>
-					<NuxtLink class="social_link">
+					<NuxtLink class="social_link" to="https://www.youtube.com/">
 						<SocialYoutube />
 					</NuxtLink>
-					<NuxtLink class="social_link">
+					<NuxtLink class="social_link" to="https://ok.ru/">
 						<SocialOk />
 					</NuxtLink>
-					<NuxtLink class="social_link">
+					<NuxtLink class="social_link" to="https://telegram.org/">
 						<SocialTelegram />
 					</NuxtLink>
 				</div>

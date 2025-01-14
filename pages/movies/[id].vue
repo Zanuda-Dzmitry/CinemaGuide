@@ -1,6 +1,11 @@
 <template>
 	<div>
-		<Movie :movieProps="movieProps" :isLoading="isLoading" :error="error" />
+		<Movie
+			:movieProps="movieProps"
+			:isLoading="isLoading"
+			:error="error"
+			:refreshMovie="refresh"
+		/>
 	</div>
 
 	<div class="container" v-if="movieData">
@@ -52,6 +57,7 @@ const {
 	data: movieData,
 	status,
 	error,
+	refresh,
 } = await useAsyncData('movieId', async () => {
 	start()
 	try {

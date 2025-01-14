@@ -108,6 +108,10 @@ onBeforeUnmount(() => {
 		border-radius: 8px;
 		padding: 12px 16px;
 
+		// &:focus-within {
+		// 	outline: 2px solid variables.$brand_color_focus;
+		// }
+
 		.search-button {
 			@include mixin.btn_reset;
 			pointer-events: none; // Отключаем взаимодействие на больших экранах
@@ -124,10 +128,15 @@ onBeforeUnmount(() => {
 			background: variables.$grey_color_3;
 			color: variables.$white_color;
 			border: none;
+			outline: none;
 			border-radius: 8px;
 			font-size: 18px;
 			line-height: 24px;
 			font-weight: 400;
+		}
+
+		&:has(input:focus) {
+			outline: 2px solid variables.$white_color;
 		}
 
 		.close-button {
