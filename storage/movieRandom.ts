@@ -12,8 +12,5 @@ export const useMovieRandom = defineStore('movieRandom', {
 			const response = await axios.get(URL_MOVIE_RANDOM)
 			this.movieRandom = response.data
 		},
-		refreshMovieData() {
-			return this.fetchMovieRandom()
-		},
 	},
 })

@@ -1,6 +1,11 @@
 <template>
 	<div>
-		<Movie :movieProps="movieProps" :isLoading="isLoading" :error="error" />
+		<Movie
+			:movieProps="movieProps"
+			:isLoading="isLoading"
+			:error="error"
+			:refreshMovie="refresh"
+		/>
 	</div>
 </template>
 
@@ -11,6 +16,7 @@ const { start, finish } = useLoadingIndicator()
 
 const {
 	data: movie,
+	refresh,
 	status,
 	error,
 } = await useAsyncData('randomMovie', async () => {

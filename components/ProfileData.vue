@@ -1,5 +1,5 @@
 <template>
-	<Profile>
+	<Profile :isLoading="isLoading">
 		<template v-slot:favorites>
 			<!-- Используем Swiper для мобильной версии -->
 			<ClientOnly v-if="containerClass">
@@ -75,9 +75,7 @@ import icon_mail from '../assets/icons/icon_mail.svg?component'
 import closeSvg from '../assets/icons/close.svg?component'
 
 const authStore = useAuthStore()
-const movieIdStore = useMovieId()
 const router = useRouter()
-const user = computed(() => authStore.user)
 
 const containerRef = ref(null)
 const { $viewport } = useNuxtApp()
@@ -86,34 +84,47 @@ const containerClass = computed(() => {
 	return $viewport.matches('mobile_small')
 })
 
-onMounted(async () => {
-	try {
-		await authStore.profile()
-	} catch (error) {
-		console.error('Ошибка загрузки профиля:', error)
-	}
+const { start, finish } = useLoadingIndicator()
 
-	await fetchMovies()
-})
-const favorites = computed(() => user.value?.favorites || [])
-const movies = ref<{ id: string; poster: string }[]>([])
+const { data, refresh, status } = await useAsyncData(
+	'userAndMovies',
+	async () => {
+		start()
+		try {
+			const movieIdStore = useMovieId()
 
-// Функция для получения информации о фильмах
-const fetchMovies = async () => {
-	const fetchPromises = favorites.value.map(async id => {
-		await movieIdStore.fetchMovieId(id)
-		return {
-			id,
-			poster: movieIdStore.moviePoster,
+			// Загрузка профиля пользователя
+			await authStore.profile()
+			const user = authStore.user
+
+			// Если у пользователя есть избранные фильмы, загружаем их данные
+			if (user?.favorites && user.favorites.length > 0) {
+				const moviePromises = user.favorites.map(async id => {
+					await movieIdStore.fetchMovieId(id)
+					return {
+						id,
+						poster: movieIdStore.movie.posterUrl,
+					}
+				})
+				const movies = await Promise.all(moviePromises)
+				return { user, movies }
+			}
+
+			// Если избранных фильмов нет, возвращаем только данные пользователя
+			return { user, movies: [] }
+		} finally {
+			finish()
 		}
-	})
+	}
+)
 
-	movies.value = await Promise.all(fetchPromises)
-}
+const user = computed(() => data.value?.user)
+const movies = computed(() => data.value?.movies || [])
+const isLoading = computed(() => status.value === 'pending')
 
 const handleRemoveFavorite = async (movieId: string) => {
 	await authStore.removeFavorites(movieId)
-	await fetchMovies()
+	await refresh()
 }
 
 const handleLogout = async () => {

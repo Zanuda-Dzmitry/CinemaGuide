@@ -84,7 +84,7 @@ export const useAuthStore = defineStore('auth', {
 				await axios.post(
 					URL_FAVORITES,
 					{
-						id: id,
+						id: id.toString(),
 					},
 					{
 						headers: {
@@ -93,7 +93,6 @@ export const useAuthStore = defineStore('auth', {
 						withCredentials: true, // Включаем cookies в запрос
 					}
 				)
-				this.user?.favorites.push(id) // Обновляем локальный массив favorites
 			} catch (error) {
 				console.error('Ошибка добавления в избранное:', error)
 				throw error
