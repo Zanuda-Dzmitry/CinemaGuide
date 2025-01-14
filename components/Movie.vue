@@ -87,9 +87,11 @@ const {
 	refresh,
 	error,
 } = useAsyncData('userFavorites', async () => {
-	await authStore.profile()
-	const user = authStore.user
-	return user?.favorites || []
+	if (authStore.user) {
+		await authStore.profile()
+		const user = authStore.user
+		return user?.favorites || []
+	}
 })
 
 // Проверяем, является ли фильм избранным
