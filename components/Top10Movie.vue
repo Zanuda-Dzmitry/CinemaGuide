@@ -102,6 +102,7 @@ const movieList = computed(() => movieData.value)
 		.card {
 			position: relative;
 			height: 336px;
+			box-shadow: 0px 0px 80px 0px variables.$grey_color_5;
 			outline: none;
 
 			&:focus .movie_poster {
