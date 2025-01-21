@@ -2,7 +2,7 @@
 	<div>
 		<button
 			class="auth-button"
-			:class="{ active_border: isPathActive('/profile') }"
+			:class="{ active_border: isPathActive }"
 			@click="user ? router.push('/profile') : modalStore.open()"
 		>
 			<profileSvg />
@@ -21,13 +21,12 @@ const modalStore = useModalStore()
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
+const errorMessage = ref('')
 const user = computed(() => authStore.user)
 
-const errorMessage = ref('')
-const isPathActive = (path: string) => {
-	return route.path === path
-}
-onMounted(isPathActive)
+const isPathActive = computed(() => {
+	return route.path === '/profile'
+})
 
 const handleProfile = async () => {
 	try {
@@ -37,6 +36,7 @@ const handleProfile = async () => {
 	}
 }
 onMounted(handleProfile)
+
 </script>
 
 <style lang="scss" scoped>

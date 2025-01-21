@@ -15,13 +15,6 @@
 <script setup lang="ts">
 import logoSvg from '../assets/icons/CinemaGuide.svg?component'
 import genresSvg from '../assets/icons/icon_genres.svg?component'
-import AuthButton from './AuthButton.vue'
-const route = useRoute()
-
-const isPathActive = (path: string) => {
-	return route.path === path
-}
-onMounted(isPathActive)
 </script>
 
 <style lang="scss" scoped>
